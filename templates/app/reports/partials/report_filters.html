@@ -1,0 +1,27 @@
+<form class="report-filters mb-7 grid grid-cols-1 items-end gap-3 rounded-[2px] border border-[#e1e4df] bg-[#fffdfa] p-4 dark:border-slate-700 dark:bg-slate-800 md:grid-cols-2 xl:grid-cols-[repeat(4,minmax(0,1fr))_auto]" method="get" action="{{ current_path }}">
+  <div class="flex flex-col gap-1">
+    <label class="text-[11px] font-bold text-[#51666c] dark:text-slate-300" for="from_date">من تاريخ</label>
+    <input class="h-10 w-full rounded-[2px] border border-[#dfe4e0] bg-[#fbfcfa] px-2.5 py-1.5 text-xs text-[#29404d] outline-none transition-all duration-200 focus:border-[#7d9b9a] focus:ring-4 focus:ring-[#dce9e5] dark:border-slate-600 dark:bg-slate-900 dark:text-slate-200" id="from_date" type="date" name="from_date" value="{{ report_filters.from_date_value }}">
+  </div>
+  <div class="flex flex-col gap-1">
+    <label class="text-[11px] font-bold text-[#51666c] dark:text-slate-300" for="to_date">إلى تاريخ</label>
+    <input class="h-10 w-full rounded-[2px] border border-[#dfe4e0] bg-[#fbfcfa] px-2.5 py-1.5 text-xs text-[#29404d] outline-none transition-all duration-200 focus:border-[#7d9b9a] focus:ring-4 focus:ring-[#dce9e5] dark:border-slate-600 dark:bg-slate-900 dark:text-slate-200" id="to_date" type="date" name="to_date" value="{{ report_filters.to_date_value }}">
+  </div>
+  <div class="flex flex-col gap-1">
+    <label class="text-[11px] font-bold text-[#51666c] dark:text-slate-300" for="currency">العملة</label>
+    <select class="h-10 w-full rounded-[2px] border border-[#dfe4e0] bg-[#fbfcfa] px-2.5 py-1.5 text-xs text-[#29404d] outline-none transition-all duration-200 focus:border-[#7d9b9a] focus:ring-4 focus:ring-[#dce9e5] dark:border-slate-600 dark:bg-slate-900 dark:text-slate-200" id="currency" name="currency">
+      <option value="">كل العملات</option>
+      {% for value, label in report_filters.currency_choices %}
+        <option value="{{ value }}" {% if report_filters.currency == value %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="flex flex-col gap-1">
+    <span class="text-[11px] font-bold text-[#51666c] dark:text-slate-300">الحالة</span>
+    <span class="h-10 py-2.5 text-xs text-[#7d918f] dark:text-slate-400">تطبيق الفلاتر على بيانات التقرير</span>
+  </div>
+  <div class="flex flex-wrap items-center gap-2">
+    <button class="inline-flex min-h-9 items-center justify-center rounded-[5px] border border-[#2d5664] bg-[#2d5664] px-3 py-1.5 text-xs font-bold text-[#fff9f0] transition-all duration-200 hover:border-[#234854] hover:bg-[#234854]" type="submit">تطبيق</button>
+    <a class="inline-flex min-h-9 items-center justify-center rounded-[5px] border border-[#e1e4df] bg-[#fffdfa] px-3 py-1.5 text-xs font-bold text-[#29404d] transition-all duration-200 hover:border-[#7d9b9a] dark:border-slate-600 dark:bg-slate-900 dark:text-slate-200" href="{{ current_path }}">مسح</a>
+  </div>
+</form>

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}تقرير المتقدمين المقبولين{% endblock %}
+{% block page_heading %}تقرير المتقدمين المقبولين{% endblock %}
+
+{% block content %}
+{% include "app/reports/partials/report_assets.html" %}
+<main dir="rtl" class="report-page min-h-screen bg-[#f5f6f3] font-['Tajawal','Noto_Sans_Arabic',Arial,sans-serif] text-[13px] leading-7 text-[#29404d] dark:bg-slate-950 dark:text-slate-200">
+  <div class="report-sheet mx-auto w-full max-w-[1440px] px-5 py-7 md:px-8">
+    <header class="report-header mb-7 flex flex-col items-start justify-between gap-5 rounded-[2px] border border-[#e1e4df] bg-[#f8f9f6]/95 p-5 shadow-[0_8px_20px_rgba(41,64,77,0.04)] backdrop-blur md:flex-row md:items-center dark:border-slate-700 dark:bg-slate-900/95">
+      <div><p class="mb-0.5 text-[11px] font-bold tracking-[0.08em] text-[#d49b55]">نتائج الترشيح</p><h1 class="m-0 text-[25px] font-extrabold leading-tight text-[#29404d] md:text-[28px] dark:text-slate-100">المتقدمون المقبولون</h1><p class="mt-1 text-xs text-[#51666c] dark:text-slate-400">تقرير المرشحين المقبولين أو الذين تم توظيفهم مع تفاصيل الشركة والرسوم.</p></div>
+      {% include "app/reports/partials/report_exports.html" with export_report="accepted" %}
+    </header>
+    {% include "app/reports/partials/report_nav.html" %}
+    {% include "app/reports/partials/report_filters.html" %}
+
+    <section class="mb-7 grid grid-cols-1 gap-5 xl:grid-cols-12">
+      <article class="rounded-[2px] border border-[#e1e4df] border-t-[3px] border-t-[#28745c] bg-[#fffdfa] p-[18px] shadow-[0_7px_18px_rgba(41,64,77,0.035)] xl:col-span-4 dark:border-slate-700 dark:bg-slate-800">
+        <span class="text-[11px] font-bold text-[#51666c] dark:text-slate-300">المقبولون</span>
+        <strong class="mt-1 block text-[25px] font-extrabold leading-tight text-[#29404d] dark:text-slate-100">{{ accepted_count|default:0 }}</strong>
+        <span class="mt-1 block text-[11px] text-[#7d918f] dark:text-slate-400">قبول أو توظيف ضمن الفترة</span>
+      </article>
+      <article class="min-w-0 rounded-[2px] border border-[#e1e4df] bg-[#fffdfa] p-[18px] shadow-[0_7px_18px_rgba(41,64,77,0.035)] xl:col-span-8 dark:border-slate-700 dark:bg-slate-800">
+        <h2 class="m-0 text-[15px] font-extrabold text-[#29404d] dark:text-slate-100">الرسوم حسب العملة</h2>
+        <p class="mt-0.5 text-[11px] text-[#7d918f] dark:text-slate-400">الإجمالي يعتمد على رسوم الموظف المحفوظة لحظة القبول.</p>
+        <div class="relative mt-4 h-[280px] min-h-[245px]"><canvas id="acceptedCurrencyChart" aria-label="رسم رسوم المقبولين"></canvas></div>
+        {{ accepted_currency_chart|json_script:"accepted-currency-data" }}
+      </article>
+    </section>
+
+    <section class="rounded-[2px] border border-[#e1e4df] bg-[#fffdfa] p-[18px] shadow-[0_7px_18px_rgba(41,64,77,0.035)] dark:border-slate-700 dark:bg-slate-800">
+      <h2 class="m-0 text-[15px] font-extrabold text-[#29404d] dark:text-slate-100">قائمة المقبولين</h2>
+      <p class="mt-0.5 text-[11px] text-[#7d918f] dark:text-slate-400">يمكن تنزيل نفس النتيجة بصيغتي CSV وPDF من أعلى الصفحة.</p>
+      <div class="mt-4 overflow-x-auto border border-[#f0f0ec] dark:border-slate-700">
+        <table class="w-full min-w-[900px] border-collapse text-right">
+          <thead class="bg-[#fafbf8] text-[11px] text-[#51666c] dark:bg-slate-900 dark:text-slate-300">
+            <tr><th class="px-3 py-2.5">المتقدم</th><th class="px-3 py-2.5">الهاتف</th><th class="px-3 py-2.5">الشركة</th><th class="px-3 py-2.5">الوظيفة</th><th class="px-3 py-2.5">الحالة</th><th class="px-3 py-2.5">تاريخ التوظيف</th><th class="px-3 py-2.5">الرسوم</th><th class="px-3 py-2.5">العملة</th></tr>
+          </thead>
+          <tbody>
+            {% for application in accepted_applicants %}
+              <tr class="border-t border-[#f0f0ec] text-xs hover:bg-[#fbfcfa] dark:border-slate-700 dark:hover:bg-slate-900">
+                <td class="px-3 py-2.5 font-bold">{{ application.applicant.full_name }}</td>
+                <td class="px-3 py-2.5">{{ application.applicant.phone }}</td>
+                <td class="px-3 py-2.5">{{ application.job_request.company.name }}</td>
+                <td class="px-3 py-2.5">{{ application.job_request.job.name }}</td>
+                <td class="px-3 py-2.5"><span class="rounded-xl bg-[#e6f3ed] px-2 py-0.5 text-[11px] font-bold text-[#28745c]">{{ application.get_status_display }}</span></td>
+                <td class="px-3 py-2.5">{{ application.employment_date|date:"Y-m-d"|default:"—" }}</td>
+                <td class="px-3 py-2.5">{{ application.fee_per_employee_snapshot|default:application.job_request.fee_per_employee|floatformat:2 }}</td>
+                <td class="px-3 py-2.5">{{ application.job_request.get_currency_display }}</td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="8" class="px-4 py-9 text-center text-[#7d918f]">لا توجد طلبات مقبولة ضمن الفلاتر الحالية.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</main>
+{% include "app/reports/partials/chart_loader.html" %}
+{% endblock %}

@@ -1,0 +1,21 @@
+{% if status == "PENDING" %}
+  <span class="inline-flex items-center gap-2 px-3 py-1 text-[11px] font-medium bg-[#fcf2df] text-[#a06b25]">
+    <span class="w-[6px] h-[6px] bg-[#a06b25]"></span>
+    قيد المتابعة
+  </span>
+{% elif status == "DONE" %}
+  <span class="inline-flex items-center gap-2 px-3 py-1 text-[11px] font-medium bg-[#e6f3ed] text-[#28745c]">
+    <span class="w-[6px] h-[6px] bg-[#28745c]"></span>
+    مكتملة
+  </span>
+{% elif status == "CANCELLED" %}
+  <span class="inline-flex items-center gap-2 px-3 py-1 text-[11px] font-medium bg-[#f4dddd] text-[#a95755]">
+    <span class="w-[6px] h-[6px] bg-[#a95755]"></span>
+    ملغاة
+  </span>
+{% else %}
+  <span class="inline-flex items-center gap-2 px-3 py-1 text-[11px] font-medium bg-[#e9eef8] text-[#466b9c]">
+    <span class="w-[6px] h-[6px] bg-[#466b9c]"></span>
+    {{ status }}
+  </span>
+{% endif %}

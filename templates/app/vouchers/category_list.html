@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}تصنيفات السندات{% endblock %}
+{% block page_heading %}تصنيفات السندات{% endblock %}
+
+{% block content %}
+<div class="space-y-7">
+
+    <div class="flex items-center justify-between">
+        <p class="text-[13px] text-[#51666c] dark:text-[#94a3b8]">
+            إدارة تصنيفات سندات القبض والصرف المستخدمة عند إنشاء السندات.
+        </p>
+
+        <div class="flex items-center gap-2">
+            <a href="{% url 'app:voucher_list' %}"
+               class="inline-flex items-center gap-2 h-10 px-4 bg-[#fffdfa] border border-[#e1e4df] text-[#51666c] text-[13px] rounded-[6px] hover:bg-[#f5f6f3] transition-all duration-200 dark:bg-[#1e293b] dark:border-[#334155] dark:text-[#94a3b8]">
+                عرض السندات
+            </a>
+            <a href="{% url 'app:vouchercategory_create' %}"
+               class="inline-flex items-center gap-2 h-10 px-4 bg-[#2d5664] text-[#fff9f0] text-[13px] font-semibold rounded-[6px] hover:bg-[#234854] transition-all duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14"/><path d="M12 5v14"/>
+                </svg>
+                إضافة تصنيف
+            </a>
+        </div>
+    </div>
+
+    <div class="bg-[#fffdfa] border border-[#e1e4df] rounded-[2px] overflow-hidden dark:bg-[#1e293b] dark:border-[#334155]">
+        <table class="w-full text-right">
+            <thead class="bg-[#fafbf8] dark:bg-[#111827]">
+                <tr>
+                    <th class="px-4 py-3 text-[11px] font-semibold text-[#51666c] dark:text-[#94a3b8]">اسم التصنيف</th>
+                    <th class="px-4 py-3 text-[11px] font-semibold text-[#51666c] dark:text-[#94a3b8]">النوع</th>
+                    <th class="px-4 py-3 text-[11px] font-semibold text-[#51666c] dark:text-[#94a3b8]">إجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in categories %}
+                <tr class="border-t border-[#f0f0ec] dark:border-[#334155]">
+                    <td class="px-4 py-3 text-[13px] text-[#29404d] dark:text-[#cbd5e1] font-medium">
+                        {{ category.name }}
+                    </td>
+                    <td class="px-4 py-3">
+                        {% if category.type == "RECEIPT" %}
+                        <span class="inline-flex items-center gap-1.5 px-2 py-1 text-[11px] font-medium rounded-[4px] bg-[#e6f3ed] text-[#28745c] dark:bg-[#0f172a] dark:text-[#6ee7b7]">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#28745c] dark:bg-[#6ee7b7]"></span>
+                            {{ category.get_type_display }}
+                        </span>
+                        {% else %}
+                        <span class="inline-flex items-center gap-1.5 px-2 py-1 text-[11px] font-medium rounded-[4px] bg-[#fdf9f7] text-[#875b53] dark:bg-[#0f172a] dark:text-[#f2b8b5]">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#875b53] dark:bg-[#f2b8b5]"></span>
+                            {{ category.get_type_display }}
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                            <a href="{% url 'app:vouchercategory_update' category.pk %}"
+                               class="flex items-center justify-center h-9 w-9 bg-[#fffdfa] border border-[#e1e4df] rounded-[6px] hover:bg-[#f5f6f3] transition-all duration-200 dark:bg-[#1e293b] dark:border-[#334155]">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/>
+                                </svg>
+                            </a>
+                            <a href="{% url 'app:vouchercategory_delete' category.pk %}"
+                               class="flex items-center justify-center h-9 w-9 bg-[#fffdfa] border border-[#e1e4df] rounded-[6px] hover:bg-[#f4dddd] transition-all duration-200 dark:bg-[#1e293b] dark:border-[#334155]">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="px-4 py-10 text-center text-[13px] text-[#7d918f]">
+                        لا توجد تصنيفات مضافة بعد.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if is_paginated %}
+    <div class="flex items-center justify-center gap-2">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}"
+           class="flex items-center justify-center h-9 w-9 bg-[#fffdfa] border border-[#e1e4df] rounded-[6px] hover:bg-[#f5f6f3] transition-all duration-200 dark:bg-[#1e293b] dark:border-[#334155]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>
+            </svg>
+        </a>
+        {% endif %}
+
+        <span class="text-[13px] text-[#51666c] dark:text-[#94a3b8]">
+            صفحة {{ page_obj.number }} من {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}"
+           class="flex items-center justify-center h-9 w-9 bg-[#fffdfa] border border-[#e1e4df] rounded-[6px] hover:bg-[#f5f6f3] transition-all duration-200 dark:bg-[#1e293b] dark:border-[#334155]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

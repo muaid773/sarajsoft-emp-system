@@ -1,0 +1,345 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_heading %}نظرة عامة{% endblock %}
+{% block title %}لوحة التحكم{% endblock %}
+
+{% block content %}
+<main dir="rtl" class="min-h-screen bg-[#f5f6f3] font-['Tajawal','Noto_Sans_Arabic',Arial,sans-serif] text-[13px] leading-7 text-[#29404d] dark:bg-slate-950 dark:text-slate-200">
+    <div class="mx-auto w-full max-w-[1440px] px-5 py-7 md:px-8">
+        <header class="mb-7 flex flex-col justify-between gap-5 border border-[#e1e4df] bg-[#f8f9f6]/95 p-5 shadow-[0_8px_20px_rgba(41,64,77,0.04)] backdrop-blur md:flex-row md:items-center dark:border-slate-700 dark:bg-slate-900/95">
+            <div>
+                <p class="mb-0.5 text-[11px] font-bold tracking-[0.08em] text-[#d49b55]">مكتب العمليات</p>
+                <h1 class="m-0 text-[25px] font-extrabold leading-tight text-[#29404d] md:text-[28px] dark:text-slate-100">
+                    نظرة عامة
+                </h1>
+                <p class="mt-1 text-xs text-[#51666c] dark:text-slate-400">
+                    مرحبًا {{ user.get_full_name|default:user.username }}، هذه ملخصات العمل حتى اليوم.
+                </p>
+            </div>
+            <div class="flex items-center gap-2 text-xs text-[#51666c] dark:text-slate-300">
+                <span class="inline-flex h-9 items-center border border-[#e1e4df] bg-[#fffdfa] px-3 dark:border-slate-600 dark:bg-slate-800">
+                    {{ today|date:"Y/m/d" }}
+                </span>
+                <a href="{% url 'app:reports' %}" class="inline-flex h-9 items-center gap-2 bg-[#2d5664] px-3 font-semibold text-[#fff9f0] transition-all duration-200 hover:bg-[#234854]">
+                    <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                        <path d="M3 3v18h18"></path><path d="m7 16 4-5 3 3 5-7"></path>
+                    </svg>
+                    مركز التقارير
+                </a>
+            </div>
+        </header>
+
+        <section class="mb-7 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4" aria-label="المؤشرات الرئيسية">
+            <article class="border border-[#e1e4df] border-t-[3px] border-t-[#466b9c] bg-[#fffdfa] p-[18px] shadow-[0_7px_18px_rgba(41,64,77,0.035)] dark:border-slate-700 dark:border-t-[#466b9c] dark:bg-slate-800">
+                <div class="mb-3 flex items-center justify-between">
+                    <span class="text-[11px] font-bold text-[#51666c] dark:text-slate-300">الشركات النشطة</span>
+                    <span class="grid h-9 w-9 place-items-center bg-[#e9eef8] text-[#466b9c]">
+                        <svg class="h-[19px] w-[19px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                            <path d="M3 21h18"></path><path d="M5 21V5h10v16"></path><path d="M15 9h4v12"></path><path d="M8 8h4M8 12h4M8 16h4"></path>
+                        </svg>
+                    </span>
+                </div>
+                <strong class="block text-[25px] font-extrabold leading-tight text-[#29404d] dark:text-slate-100">{{ stats.active_companies|default:0 }}</strong>
+                <span class="mt-1 block text-[11px] text-[#7d918f] dark:text-slate-400">من أصل {{ stats.companies|default:0 }} شركة</span>
+            </article>
+
+            <article class="border border-[#e1e4df] border-t-[3px] border-t-[#a06b25] bg-[#fffdfa] p-[18px] shadow-[0_7px_18px_rgba(41,64,77,0.035)] dark:border-slate-700 dark:border-t-[#a06b25] dark:bg-slate-800">
+                <div class="mb-3 flex items-center justify-between">
+                    <span class="text-[11px] font-bold text-[#51666c] dark:text-slate-300">طلبات الشركات المفتوحة</span>
+                    <span class="grid h-9 w-9 place-items-center bg-[#fcf2df] text-[#a06b25]">
+                        <svg class="h-[19px] w-[19px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                            <path d="M4 5h16v14H4z"></path><path d="M8 9h8M8 13h5"></path>
+                        </svg>
+                    </span>
+                </div>
+                <strong class="block text-[25px] font-extrabold leading-tight text-[#29404d] dark:text-slate-100">{{ stats.open_job_requests|default:0 }}</strong>
+                <span class="mt-1 block text-[11px] text-[#7d918f] dark:text-slate-400">من إجمالي {{ stats.job_requests|default:0 }} طلب</span>
+            </article>
+
+            <article class="border border-[#e1e4df] border-t-[3px] border-t-[#28745c] bg-[#fffdfa] p-[18px] shadow-[0_7px_18px_rgba(41,64,77,0.035)] dark:border-slate-700 dark:border-t-[#28745c] dark:bg-slate-800">
+                <div class="mb-3 flex items-center justify-between">
+                    <span class="text-[11px] font-bold text-[#51666c] dark:text-slate-300">المتقدمون المقبولون</span>
+                    <span class="grid h-9 w-9 place-items-center bg-[#e6f3ed] text-[#28745c]">
+                        <svg class="h-[19px] w-[19px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="m17 11 2 2 4-4"></path>
+                        </svg>
+                    </span>
+                </div>
+                <strong class="block text-[25px] font-extrabold leading-tight text-[#29404d] dark:text-slate-100">{{ stats.accepted_applicants|default:0 }}</strong>
+                <span class="mt-1 block text-[11px] text-[#7d918f] dark:text-slate-400">تم توظيف {{ stats.hired_applicants|default:0 }} متقدم</span>
+            </article>
+
+            <article class="border border-[#e1e4df] border-t-[3px] border-t-[#875b53] bg-[#fffdfa] p-[18px] shadow-[0_7px_18px_rgba(41,64,77,0.035)] dark:border-slate-700 dark:border-t-[#875b53] dark:bg-slate-800">
+                <div class="mb-3 flex items-center justify-between">
+                    <span class="text-[11px] font-bold text-[#51666c] dark:text-slate-300">المتابعات المستحقة</span>
+                    <span class="grid h-9 w-9 place-items-center bg-[#fdf9f7] text-[#875b53]">
+                        <svg class="h-[19px] w-[19px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                            <circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path>
+                        </svg>
+                    </span>
+                </div>
+                <strong class="block text-[25px] font-extrabold leading-tight text-[#29404d] dark:text-slate-100">{{ stats.pending_followups|default:0 }}</strong>
+                <span class="mt-1 block text-[11px] text-[#7d918f] dark:text-slate-400">تحتاج إلى متابعة اليوم</span>
+            </article>
+        </section>
+
+        <section class="mb-7 border border-[#e1e4df] bg-[#fffdfa] p-[18px] shadow-[0_7px_18px_rgba(41,64,77,0.035)] dark:border-slate-700 dark:bg-slate-800">
+            <div class="mb-4 flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+                <div>
+                    <h2 class="m-0 text-[15px] font-extrabold text-[#29404d] dark:text-slate-100">اختصارات العمل</h2>
+                    <p class="mt-0.5 text-[11px] text-[#7d918f] dark:text-slate-400">انتقل مباشرة إلى أكثر العمليات استخدامًا.</p>
+                </div>
+                <span class="text-[11px] text-[#7d918f] dark:text-slate-400">{{ stats.monthly_applications|default:0 }} طلب توظيف جديد هذا الشهر</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-8">
+                <a href="{% url 'app:company_create' %}" class="group border border-[#e1e4df] bg-[#fbfcfa] p-3 transition-all duration-200 hover:border-[#7d9b9a] hover:bg-[#f4f8f5] dark:border-slate-700 dark:bg-slate-900 dark:hover:border-slate-500">
+                    <svg class="mb-2 h-[19px] w-[19px] text-[#466b9c]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20V4M4 12h16"></path><path d="M5 20h14V7H5z"></path></svg>
+                    <span class="block text-xs font-bold">إضافة شركة</span>
+                </a>
+                <a href="{% url 'app:companies_requests_create' %}" class="group border border-[#e1e4df] bg-[#fbfcfa] p-3 transition-all duration-200 hover:border-[#7d9b9a] hover:bg-[#f4f8f5] dark:border-slate-700 dark:bg-slate-900 dark:hover:border-slate-500">
+                    <svg class="mb-2 h-[19px] w-[19px] text-[#a06b25]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v14H4z"></path><path d="M8 9h8M8 13h5"></path></svg>
+                    <span class="block text-xs font-bold">طلب شركة</span>
+                </a>
+                <a href="{% url 'app:applicants_create' %}" class="group border border-[#e1e4df] bg-[#fbfcfa] p-3 transition-all duration-200 hover:border-[#7d9b9a] hover:bg-[#f4f8f5] dark:border-slate-700 dark:bg-slate-900 dark:hover:border-slate-500">
+                    <svg class="mb-2 h-[19px] w-[19px] text-[#28745c]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="7" r="4"></circle><path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"></path></svg>
+                    <span class="block text-xs font-bold">إضافة متقدم</span>
+                </a>
+                <a href="{% url 'app:applications_create' %}" class="group border border-[#e1e4df] bg-[#fbfcfa] p-3 transition-all duration-200 hover:border-[#7d9b9a] hover:bg-[#f4f8f5] dark:border-slate-700 dark:bg-slate-900 dark:hover:border-slate-500">
+                    <svg class="mb-2 h-[19px] w-[19px] text-[#466b9c]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v14H4z"></path><path d="m8 12 2 2 5-5"></path></svg>
+                    <span class="block text-xs font-bold">تسجيل ترشيح</span>
+                </a>
+                <a href="{% url 'app:followup_create' %}" class="group border border-[#e1e4df] bg-[#fbfcfa] p-3 transition-all duration-200 hover:border-[#7d9b9a] hover:bg-[#f4f8f5] dark:border-slate-700 dark:bg-slate-900 dark:hover:border-slate-500">
+                    <svg class="mb-2 h-[19px] w-[19px] text-[#875b53]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+                    <span class="block text-xs font-bold">متابعة جديدة</span>
+                </a>
+                <a href="{% url 'app:voucher_create' %}" class="group border border-[#e1e4df] bg-[#fbfcfa] p-3 transition-all duration-200 hover:border-[#7d9b9a] hover:bg-[#f4f8f5] dark:border-slate-700 dark:bg-slate-900 dark:hover:border-slate-500">
+                    <svg class="mb-2 h-[19px] w-[19px] text-[#a95755]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4h14v16H5z"></path><path d="M8 8h8M8 12h8M8 16h5"></path></svg>
+                    <span class="block text-xs font-bold">إضافة سند</span>
+                </a>
+                <a href="{% url 'app:reports' %}" class="group border border-[#e1e4df] bg-[#fbfcfa] p-3 transition-all duration-200 hover:border-[#7d9b9a] hover:bg-[#f4f8f5] dark:border-slate-700 dark:bg-slate-900 dark:hover:border-slate-500">
+                    <svg class="mb-2 h-[19px] w-[19px] text-[#2d5664]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"></path><path d="m7 16 4-5 3 3 5-7"></path></svg>
+                    <span class="block text-xs font-bold">التقارير</span>
+                </a>
+                <a href="{% url 'app:applicants' %}" class="group border border-[#e1e4df] bg-[#fbfcfa] p-3 transition-all duration-200 hover:border-[#7d9b9a] hover:bg-[#f4f8f5] dark:border-slate-700 dark:bg-slate-900 dark:hover:border-slate-500">
+                    <svg class="mb-2 h-[19px] w-[19px] text-[#51666c]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v14H4z"></path><path d="M8 9h8M8 13h8M8 17h4"></path></svg>
+                    <span class="block text-xs font-bold">سجل المتقدمين</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="mb-7 grid grid-cols-1 gap-5 xl:grid-cols-12">
+            <article class="min-w-0 border border-[#e1e4df] bg-[#fffdfa] p-[18px] shadow-[0_7px_18px_rgba(41,64,77,0.035)] xl:col-span-8 dark:border-slate-700 dark:bg-slate-800">
+                <div class="mb-4">
+                    <h2 class="m-0 text-[15px] font-extrabold text-[#29404d] dark:text-slate-100">الحركة المالية للشهر الحالي</h2>
+                    <p class="mt-0.5 text-[11px] text-[#7d918f] dark:text-slate-400">الإيرادات والمصروفات مفصولة حسب العملة حتى لا تختلط العملات.</p>
+                </div>
+                <div class="relative h-[280px] min-h-[240px]">
+                    <canvas id="dashboardFinanceChart" aria-label="الحركة المالية"></canvas>
+                </div>
+                {{ finance_chart|json_script:"dashboard-finance-data" }}
+            </article>
+
+            <article class="min-w-0 border border-[#e1e4df] bg-[#fffdfa] p-[18px] shadow-[0_7px_18px_rgba(41,64,77,0.035)] xl:col-span-4 dark:border-slate-700 dark:bg-slate-800">
+                <div class="mb-4">
+                    <h2 class="m-0 text-[15px] font-extrabold text-[#29404d] dark:text-slate-100">حالة المتقدمين</h2>
+                    <p class="mt-0.5 text-[11px] text-[#7d918f] dark:text-slate-400">التوزيع الحالي لكل طلبات التوظيف.</p>
+                </div>
+                <div class="relative h-[280px] min-h-[240px]">
+                    <canvas id="dashboardApplicationChart" aria-label="حالة المتقدمين"></canvas>
+                </div>
+                {{ application_chart|json_script:"dashboard-application-data" }}
+            </article>
+        </section>
+
+        <section class="mb-7 grid grid-cols-1 gap-5 sm:grid-cols-3">
+            <article class="border border-[#e1e4df] bg-[#fffdfa] p-[18px] dark:border-slate-700 dark:bg-slate-800">
+                <span class="text-[11px] font-bold text-[#7d918f] dark:text-slate-400">المتقدمون الجدد هذا الشهر</span>
+                <strong class="mt-1 block text-2xl font-extrabold text-[#29404d] dark:text-slate-100">{{ stats.monthly_applicants|default:0 }}</strong>
+            </article>
+            <article class="border border-[#e1e4df] bg-[#fffdfa] p-[18px] dark:border-slate-700 dark:bg-slate-800">
+                <span class="text-[11px] font-bold text-[#7d918f] dark:text-slate-400">الشركات المضافة هذا الشهر</span>
+                <strong class="mt-1 block text-2xl font-extrabold text-[#29404d] dark:text-slate-100">{{ stats.monthly_companies|default:0 }}</strong>
+            </article>
+            <article class="border border-[#e1e4df] bg-[#fffdfa] p-[18px] dark:border-slate-700 dark:bg-slate-800">
+                <span class="text-[11px] font-bold text-[#7d918f] dark:text-slate-400">السندات المسجلة هذا الشهر</span>
+                <strong class="mt-1 block text-2xl font-extrabold text-[#29404d] dark:text-slate-100">{{ stats.monthly_vouchers|default:0 }}</strong>
+            </article>
+        </section>
+
+        <section class="grid grid-cols-1 gap-5 xl:grid-cols-3">
+            <article class="border border-[#e1e4df] bg-[#fffdfa] p-[18px] shadow-[0_7px_18px_rgba(41,64,77,0.035)] dark:border-slate-700 dark:bg-slate-800">
+                <div class="mb-4 flex items-center justify-between">
+                    <div>
+                        <h2 class="m-0 text-[15px] font-extrabold text-[#29404d] dark:text-slate-100">آخر طلبات التوظيف</h2>
+                        <p class="mt-0.5 text-[11px] text-[#7d918f] dark:text-slate-400">أحدث الترشيحات المسجلة.</p>
+                    </div>
+                    <a href="{% url 'app:applications' %}" class="text-xs font-bold text-[#2d5664] hover:underline dark:text-slate-300">عرض الكل</a>
+                </div>
+                {% if recent_applications %}
+                    <ul class="m-0 grid list-none gap-3 p-0">
+                        {% for application in recent_applications %}
+                            <li class="flex items-start justify-between gap-3 border-b border-[#f0f0ec] pb-3 last:border-0 last:pb-0 dark:border-slate-700">
+                                <div class="min-w-0">
+                                    <span class="block truncate text-xs font-bold">{{ application.applicant.full_name }}</span>
+                                    <span class="block truncate text-[11px] text-[#7d918f] dark:text-slate-400">{{ application.job_request.company.name }} — {{ application.job_request.job.name }}</span>
+                                </div>
+                                <span class="whitespace-nowrap bg-[#e9eef8] px-2 py-0.5 text-[11px] font-bold text-[#466b9c]">{{ application.get_status_display }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="py-8 text-center text-xs text-[#7d918f] dark:text-slate-400">لا توجد طلبات توظيف بعد.</p>
+                {% endif %}
+            </article>
+
+            <article class="border border-[#e1e4df] bg-[#fffdfa] p-[18px] shadow-[0_7px_18px_rgba(41,64,77,0.035)] dark:border-slate-700 dark:bg-slate-800">
+                <div class="mb-4 flex items-center justify-between">
+                    <div>
+                        <h2 class="m-0 text-[15px] font-extrabold text-[#29404d] dark:text-slate-100">آخر السندات</h2>
+                        <p class="mt-0.5 text-[11px] text-[#7d918f] dark:text-slate-400">آخر حركة في الدفتر المالي.</p>
+                    </div>
+                    <a href="{% url 'app:voucher_list' %}" class="text-xs font-bold text-[#2d5664] hover:underline dark:text-slate-300">عرض الكل</a>
+                </div>
+                {% if recent_vouchers %}
+                    <ul class="m-0 grid list-none gap-3 p-0">
+                        {% for voucher in recent_vouchers %}
+                            <li class="flex items-start justify-between gap-3 border-b border-[#f0f0ec] pb-3 last:border-0 last:pb-0 dark:border-slate-700">
+                                <div class="min-w-0">
+                                    <span class="block truncate text-xs font-bold">{{ voucher.voucher_number|default:"بدون رقم" }}</span>
+                                    <span class="block truncate text-[11px] text-[#7d918f] dark:text-slate-400">{{ voucher.company_name|default:"مصروف عام" }}</span>
+                                </div>
+                                <span class="whitespace-nowrap text-xs font-extrabold {% if voucher.type == 'RECEIPT' %}text-[#28745c]{% else %}text-[#a95755]{% endif %}">{{ voucher.amount|floatformat:2 }} {{ voucher.currency }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="py-8 text-center text-xs text-[#7d918f] dark:text-slate-400">لا توجد سندات بعد.</p>
+                {% endif %}
+            </article>
+
+            <article class="border border-[#e1e4df] bg-[#fffdfa] p-[18px] shadow-[0_7px_18px_rgba(41,64,77,0.035)] dark:border-slate-700 dark:bg-slate-800">
+                <div class="mb-4 flex items-center justify-between">
+                    <div>
+                        <h2 class="m-0 text-[15px] font-extrabold text-[#29404d] dark:text-slate-100">المتابعات القادمة</h2>
+                        <p class="mt-0.5 text-[11px] text-[#7d918f] dark:text-slate-400">الأعمال التي تحتاج متابعة لاحقًا.</p>
+                    </div>
+                    <a href="{% url 'app:followup_list' %}" class="text-xs font-bold text-[#2d5664] hover:underline dark:text-slate-300">عرض الكل</a>
+                </div>
+                {% if upcoming_followups %}
+                    <ul class="m-0 grid list-none gap-3 p-0">
+                        {% for followup in upcoming_followups %}
+                            <li class="flex items-start justify-between gap-3 border-b border-[#f0f0ec] pb-3 last:border-0 last:pb-0 dark:border-slate-700">
+                                <div class="min-w-0">
+                                    <span class="block truncate text-xs font-bold">{% if followup.company %}{{ followup.company.name }}{% else %}{{ followup.applicant.full_name }}{% endif %}</span>
+                                    <span class="block truncate text-[11px] text-[#7d918f] dark:text-slate-400">{{ followup.note }}</span>
+                                </div>
+                                <span class="whitespace-nowrap bg-[#fcf2df] px-2 py-0.5 text-[11px] font-bold text-[#a06b25]">{{ followup.follow_up_date|date:"Y/m/d" }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="py-8 text-center text-xs text-[#7d918f] dark:text-slate-400">لا توجد متابعات قادمة.</p>
+                {% endif %}
+            </article>
+        </section>
+    </div>
+</main>
+
+<script src="{% static 'lib/char.js' %}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if (typeof Chart === "undefined") {
+            return;
+        }
+
+        const palette = {
+            blue: "#466b9c",
+            green: "#28745c",
+            gold: "#d49b55",
+            red: "#a95755",
+            muted: "#b8c4c1",
+        };
+
+        const financeElement = document.getElementById("dashboard-finance-data");
+        const financeCanvas = document.getElementById("dashboardFinanceChart");
+        if (financeElement && financeCanvas) {
+            const finance = JSON.parse(financeElement.textContent);
+            new Chart(financeCanvas, {
+                type: "bar",
+                data: {
+                    labels: finance.labels,
+                    datasets: [
+                        {
+                            label: "الإيرادات",
+                            data: finance.revenue,
+                            backgroundColor: palette.green,
+                            borderRadius: 2,
+                            maxBarThickness: 30,
+                        },
+                        {
+                            label: "المصروفات",
+                            data: finance.expenses,
+                            backgroundColor: palette.red,
+                            borderRadius: 2,
+                            maxBarThickness: 30,
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: "index", intersect: false },
+                    plugins: {
+                        legend: {
+                            position: "bottom",
+                            labels: { usePointStyle: true, boxWidth: 8, font: { family: "Tajawal" } },
+                        },
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { family: "Tajawal" } } },
+                        y: { beginAtZero: true, ticks: { font: { family: "Tajawal" } } },
+                    },
+                },
+            });
+        }
+
+        const applicationElement = document.getElementById("dashboard-application-data");
+        const applicationCanvas = document.getElementById("dashboardApplicationChart");
+        if (applicationElement && applicationCanvas) {
+            const application = JSON.parse(applicationElement.textContent);
+            new Chart(applicationCanvas, {
+                type: "doughnut",
+                data: {
+                    labels: application.labels,
+                    datasets: [{
+                        data: application.values,
+                        backgroundColor: [
+                            palette.blue,
+                            palette.gold,
+                            "#8ba5c7",
+                            palette.muted,
+                            palette.green,
+                            palette.red,
+                            "#875b53",
+                        ],
+                        borderWidth: 2,
+                        borderColor: "#fffdfa",
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: "63%",
+                    plugins: {
+                        legend: {
+                            position: "bottom",
+                            labels: { usePointStyle: true, boxWidth: 8, font: { family: "Tajawal" } },
+                        },
+                    },
+                },
+            });
+        }
+    });
+</script>
+{% endblock %}

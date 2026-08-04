@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}{% if form.instance.pk %}تعديل التصنيف{% else %}إضافة تصنيف جديد{% endif %}{% endblock %}
+{% block page_heading %}{% if form.instance.pk %}تعديل التصنيف{% else %}إضافة تصنيف جديد{% endif %}{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto space-y-7">
+
+    <a href="{% url 'app:vouchercategory_list' %}"
+       class="inline-flex items-center gap-2 text-[13px] text-[#51666c] hover:text-[#29404d] transition-all duration-200 dark:text-[#94a3b8]">
+        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+        </svg>
+        الرجوع لقائمة التصنيفات
+    </a>
+
+    <div class="bg-[#fffdfa] border border-[#e1e4df] rounded-[2px] p-6 dark:bg-[#1e293b] dark:border-[#334155]">
+
+        {% if form.non_field_errors %}
+        <div class="mb-5 px-4 py-3 bg-[#f4dddd] text-[#a95755] text-[13px] rounded-[4px] dark:bg-[#0f172a] dark:text-[#f2b8b5]">
+            {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+
+            <div class="flex flex-col gap-5">
+
+                <div class="flex flex-col gap-1.5">
+                    <label for="{{ form.name.id_for_label }}" class="text-[13px] text-[#29404d] dark:text-[#cbd5e1]">
+                        اسم التصنيف <span class="text-[#a95755]">*</span>
+                    </label>
+                    {{ form.name }}
+                    {% for error in form.name.errors %}
+                    <p class="text-[12px] text-[#a95755]">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                    <label for="{{ form.type.id_for_label }}" class="text-[13px] text-[#29404d] dark:text-[#cbd5e1]">
+                        نوع السند <span class="text-[#a95755]">*</span>
+                    </label>
+                    {{ form.type }}
+                    {% for error in form.type.errors %}
+                    <p class="text-[12px] text-[#a95755]">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+            <div class="flex items-center gap-3 mt-7 pt-5 border-t border-[#f0f0ec] dark:border-[#334155]">
+                <button type="submit"
+                        class="inline-flex items-center gap-2 h-10 px-5 bg-[#2d5664] text-[#fff9f0] text-[13px] font-semibold rounded-[6px] hover:bg-[#234854] transition-all duration-200">
+                    حفظ التصنيف
+                </button>
+                <a href="{% url 'app:vouchercategory_list' %}"
+                   class="inline-flex items-center gap-2 h-10 px-5 bg-[#fffdfa] border border-[#e1e4df] text-[#51666c] text-[13px] rounded-[6px] hover:bg-[#f5f6f3] transition-all duration-200 dark:bg-[#1e293b] dark:border-[#334155] dark:text-[#94a3b8]">
+                    إلغاء
+                </a>
+            </div>
+        </form>
+    </div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const companyField = document.getElementById("{{ form.company.id_for_label }}");
+
+    companyField.addEventListener("change", function () {
+        const companyId = this.value;
+
+        fetch(`/ajax/company/${companyId}/voucher-data/`)
+            .then(response => response.json())
+            .then(data => {
+
+                // تحديث طلبات الشركة
+                const jobField = document.getElementById(
+                    "{{ form.job_request.id_for_label }}"
+                );
+
+                jobField.innerHTML = "";
+
+                data.jobs.forEach(job => {
+                    jobField.innerHTML += 
+                    `<option value="${job.id}">
+                        ${job.name}
+                    </option>`;
+                });
+
+
+                // تحديث التصنيفات
+                const categoryField = document.getElementById(
+                    "{{ form.category.id_for_label }}"
+                );
+
+                categoryField.innerHTML = "";
+
+                data.categories.forEach(category => {
+                    categoryField.innerHTML += 
+                    `<option value="${category.id}">
+                        ${category.name}
+                    </option>`;
+                });
+
+            });
+
+    });
+
+});
+</script>
+</div>
+{% endblock %}

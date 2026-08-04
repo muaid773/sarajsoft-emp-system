@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block title %}السندات المالية{% endblock %}
+{% block page_heading %}السندات المالية{% endblock %}
+
+{% block content %}
+<div class="space-y-7">
+
+    {# ────────────── شريط العنوان والإجراءات ────────────── #}
+    <div class="flex items-center justify-between">
+        <p class="text-[13px] text-[#51666c] dark:text-[#94a3b8]">
+            إدارة سندات القبض والصرف الخاصة بالشركات وطلبات التوظيف.
+        </p>
+
+        <a href="{% url 'app:voucher_create' %}"
+           class="inline-flex items-center gap-2 h-10 px-4 bg-[#2d5664] text-[#fff9f0] text-[13px] font-semibold rounded-[6px] hover:bg-[#234854] transition-all duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"/><path d="M12 5v14"/>
+            </svg>
+            إضافة سند
+        </a>
+    </div>
+
+    {# ────────────── فورم التصفية ────────────── #}
+    <div class="bg-[#fffdfa] border border-[#e1e4df] rounded-[2px] p-5 dark:bg-[#1e293b] dark:border-[#334155]">
+        {{ filter_form.media }}
+        <form method="get" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 items-end">
+
+            <div class="flex flex-col gap-1.5">
+                <label for="{{ filter_form.type.id_for_label }}" class="text-[12px] text-[#51666c] dark:text-[#94a3b8]">{{ filter_form.type.label }}</label>
+                {{ filter_form.type }}
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+                <label for="{{ filter_form.category.id_for_label }}" class="text-[12px] text-[#51666c] dark:text-[#94a3b8]">{{ filter_form.category.label }}</label>
+                {{ filter_form.category }}
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+                <label for="{{ filter_form.company.id_for_label }}" class="text-[12px] text-[#51666c] dark:text-[#94a3b8]">{{ filter_form.company.label }}</label>
+                {{ filter_form.company }}
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+                <label for="{{ filter_form.date_from.id_for_label }}" class="text-[12px] text-[#51666c] dark:text-[#94a3b8]">{{ filter_form.date_from.label }}</label>
+                {{ filter_form.date_from }}
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+                <label for="{{ filter_form.date_to.id_for_label }}" class="text-[12px] text-[#51666c] dark:text-[#94a3b8]">{{ filter_form.date_to.label }}</label>
+                {{ filter_form.date_to }}
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+                <label for="{{ filter_form.search.id_for_label }}" class="text-[12px] text-[#51666c] dark:text-[#94a3b8]">{{ filter_form.search.label }}</label>
+                {{ filter_form.search }}
+            </div>
+
+            <div class="md:col-span-3 lg:col-span-6 flex items-center gap-3 pt-1">
+                <button type="submit"
+                        class="inline-flex items-center gap-2 h-10 px-4 bg-[#2d5664] text-[#fff9f0] text-[13px] font-semibold rounded-[6px] hover:bg-[#234854] transition-all duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                    </svg>
+                    تصفية النتائج
+                </button>
+
+                <a href="{% url 'app:voucher_list' %}"
+                   class="text-[13px] text-[#7d918f] hover:text-[#51666c] transition-all duration-200">
+                    إعادة تعيين
+                </a>
+            </div>
+        </form>
+    </div>
+
+    {# ────────────── جدول السندات ────────────── #}
+    <div class="bg-[#fffdfa] border border-[#e1e4df] rounded-[2px] overflow-hidden dark:bg-[#1e293b] dark:border-[#334155]">
+        <table class="w-full text-right">
+            <thead class="bg-[#fafbf8] dark:bg-[#111827]">
+                <tr>
+                    <th class="px-4 py-3 text-[11px] font-semibold text-[#51666c] dark:text-[#94a3b8]">رقم السند</th>
+                    <th class="px-4 py-3 text-[11px] font-semibold text-[#51666c] dark:text-[#94a3b8]">الشركة</th>
+                    <th class="px-4 py-3 text-[11px] font-semibold text-[#51666c] dark:text-[#94a3b8]">النوع</th>
+                    <th class="px-4 py-3 text-[11px] font-semibold text-[#51666c] dark:text-[#94a3b8]">التصنيف</th>
+                    <th class="px-4 py-3 text-[11px] font-semibold text-[#51666c] dark:text-[#94a3b8]">المبلغ</th>
+                    <th class="px-4 py-3 text-[11px] font-semibold text-[#51666c] dark:text-[#94a3b8]">التاريخ</th>
+                    <th class="px-4 py-3 text-[11px] font-semibold text-[#51666c] dark:text-[#94a3b8]">إجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for voucher in vouchers %}
+                <tr class="border-t border-[#f0f0ec] dark:border-[#334155]">
+                    <td class="px-4 py-3 text-[13px] text-[#29404d] dark:text-[#cbd5e1] font-medium">
+                        {{ voucher.voucher_number|default:"—" }}
+                    </td>
+                    <td class="px-4 py-3 text-[13px] text-[#29404d] dark:text-[#cbd5e1]">
+                        {% if voucher.company %}
+                            {{ voucher.company.name }}
+                        {% else %}
+                            {{ voucher.company_name }}
+                            <span class="text-[11px] text-[#7d918f]">(محذوفة)</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-3">
+                        {% if voucher.type == "RECEIPT" %}
+                        <span class="inline-flex items-center gap-1.5 px-2 py-1 text-[11px] font-medium rounded-[4px] bg-[#e6f3ed] text-[#28745c] dark:bg-[#0f172a] dark:text-[#6ee7b7]">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#28745c] dark:bg-[#6ee7b7]"></span>
+                            {{ voucher.get_type_display }}
+                        </span>
+                        {% else %}
+                        <span class="inline-flex items-center gap-1.5 px-2 py-1 text-[11px] font-medium rounded-[4px] bg-[#fdf9f7] text-[#875b53] dark:bg-[#0f172a] dark:text-[#f2b8b5]">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#875b53] dark:bg-[#f2b8b5]"></span>
+                            {{ voucher.get_type_display }}
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-3 text-[13px] text-[#51666c] dark:text-[#94a3b8]">
+                        {{ voucher.category.name }}
+                    </td>
+                    <td class="px-4 py-3 text-[13px] text-[#29404d] dark:text-[#cbd5e1] font-medium">
+                        {{ voucher.amount }} {{ voucher.get_currency_display }}
+                    </td>
+                    <td class="px-4 py-3 text-[13px] text-[#51666c] dark:text-[#94a3b8]">
+                        {{ voucher.voucher_date }}
+                    </td>
+                    <td class="px-4 py-3">
+                        <div class="flex items-center gap-2">
+                            <a href="{% url 'app:voucher_detail' voucher.pk %}"
+                               class="flex items-center justify-center h-9 w-9 bg-[#fffdfa] border border-[#e1e4df] rounded-[6px] hover:bg-[#f5f6f3] transition-all duration-200 dark:bg-[#1e293b] dark:border-[#334155]">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </a>
+                            <a href="{% url 'app:voucher_update' voucher.pk %}"
+                               class="flex items-center justify-center h-9 w-9 bg-[#fffdfa] border border-[#e1e4df] rounded-[6px] hover:bg-[#f5f6f3] transition-all duration-200 dark:bg-[#1e293b] dark:border-[#334155]">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/>
+                                </svg>
+                            </a>
+                            <a href="{% url 'app:voucher_delete' voucher.pk %}"
+                               class="flex items-center justify-center h-9 w-9 bg-[#fffdfa] border border-[#e1e4df] rounded-[6px] hover:bg-[#f4dddd] transition-all duration-200 dark:bg-[#1e293b] dark:border-[#334155]">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="px-4 py-10 text-center text-[13px] text-[#7d918f]">
+                        لا توجد سندات مطابقة لمعايير البحث الحالية.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {# ────────────── ترقيم الصفحات ────────────── #}
+    {% if is_paginated %}
+    <div class="flex items-center justify-center gap-2">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}"
+           class="flex items-center justify-center h-9 w-9 bg-[#fffdfa] border border-[#e1e4df] rounded-[6px] hover:bg-[#f5f6f3] transition-all duration-200 dark:bg-[#1e293b] dark:border-[#334155]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>
+            </svg>
+        </a>
+        {% endif %}
+
+        <span class="text-[13px] text-[#51666c] dark:text-[#94a3b8]">
+            صفحة {{ page_obj.number }} من {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}"
+           class="flex items-center justify-center h-9 w-9 bg-[#fffdfa] border border-[#e1e4df] rounded-[6px] hover:bg-[#f5f6f3] transition-all duration-200 dark:bg-[#1e293b] dark:border-[#334155]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

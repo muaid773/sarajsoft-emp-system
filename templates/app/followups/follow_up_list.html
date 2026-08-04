@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block title %}قائمة المتابعات{% endblock %}
+{% block page_heading %}قائمة المتابعات{% endblock %}
+
+{% block content %}
+<div class="space-y-5">
+
+    <!-- شريط التصفية -->
+    <form method="get" class="bg-[#fffdfa] border border-[#e1e4df] px-5 py-4">
+        <div class="flex flex-wrap items-end gap-4">
+
+            <div class="flex flex-col gap-1.5">
+                <label class="text-[12px] text-[#51666c]">{{ filter_form.status.label }}</label>
+                {{ filter_form.status }}
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+                <label class="text-[12px] text-[#51666c]">{{ filter_form.date_filter.label }}</label>
+                {{ filter_form.date_filter }}
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+                <label class="text-[12px] text-[#51666c]">{{ filter_form.search.label }}</label>
+                {{ filter_form.search }}
+            </div>
+
+            <button type="submit"
+                    class="h-9 px-4 bg-[#2d5664] text-[#fff9f0] text-[13px] font-semibold
+                           rounded-[4px] hover:bg-[#234854] transition-all duration-200">
+                تصفية
+            </button>
+
+             <a href="{% url 'app:followup_list' %}"
+               class="h-9 flex items-center px-4 text-[13px] text-[#7d918f]
+                      hover:text-[#51666c] transition-all duration-200">
+                إعادة تعيين
+            </a>
+
+            <a href="{% url 'app:followup_create' %}"
+               class="h-9 flex items-center px-4 bg-[#d49b55] text-[#fff9f0] text-[13px] font-semibold
+                      rounded-[4px] hover:opacity-90 transition-all duration-200 mr-auto">
+                + إضافة متابعة
+            </a>
+            <a href="{% url 'app:followup' %}"
+                class="h-9 flex items-center px-4 bg-[#2d5664] text-[#fff9f0] text-[13px] font-semibold
+                        rounded-[4px] hover:opacity-90 transition-all duration-200 mr-auto">
+                    متابعات اليوم
+            </a>
+        </div>
+    </form>
+
+    <!-- جدول المتابعات -->
+    <div class="bg-[#fffdfa] border border-[#e1e4df]">
+        {% if followups %}
+        <table class="w-full text-right">
+            <thead>
+                <tr class="bg-[#fafbf8] text-[11px] text-[#7d918f]">
+                    <th class="px-5 py-3 font-medium w-10"></th>
+                    <th class="px-5 py-3 font-medium">الجهة</th>
+                    <th class="px-5 py-3 font-medium">تاريخ المتابعة</th>
+                    <th class="px-5 py-3 font-medium">الملاحظة</th>
+                    <th class="px-5 py-3 font-medium">الحالة</th>
+                    <th class="px-5 py-3 font-medium"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for f in followups %}
+                <tr class="border-t border-[#f0f0ec] hover:bg-[#fafbf8] transition-all duration-150">
+                    <td class="px-5 py-3">
+                        <form method="post" action="{% url 'app:followup_toggle_status' f.pk %}" class="inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                            <button type="submit"
+                                    title="{% if f.status == 'COMPLETED' %}إعادة إلى قيد الانتظار{% else %}تعيين كمكتملة{% endif %}"
+                                    class="w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-200
+                                           {% if f.status == 'COMPLETED' %}
+                                               bg-[#28745c] border-[#28745c] text-white hover:bg-[#20604b]
+                                           {% else %}
+                                               border-[#c7cec9] text-transparent hover:border-[#28745c] hover:text-[#28745c]
+                                           {% endif %}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M5 13l4 4L19 7"/>
+                                </svg>
+                            </button>
+                        </form>
+                    </td>
+                    <td class="px-5 py-3 text-[13px] text-[#29404d]">
+                        {% if f.company %}
+                            {{ f.company.name }}
+                        {% elif f.applicant %}
+                            {{ f.applicant.full_name }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+                    <td class="px-5 py-3 text-[13px] text-[#51666c]">{{ f.follow_up_date }}</td>
+                    <td class="px-5 py-3 text-[13px] text-[#51666c]">
+                        {{ f.note|default:"—"|truncatechars:60 }}
+                    </td>
+                    <td class="px-5 py-3">
+                        {% if f.status == "PENDING" %}
+                        <span class="inline-flex items-center gap-1.5 text-[11px] px-2 py-1" style="background:#fcf2df; color:#a06b25;">
+                        {% elif f.status == "COMPLETED" %}
+                        <span class="inline-flex items-center gap-1.5 text-[11px] px-2 py-1" style="background:#e6f3ed; color:#28745c;">
+                        {% else %}
+                        <span class="inline-flex items-center gap-1.5 text-[11px] px-2 py-1" style="background:#e9eef8; color:#466b9c;">
+                        {% endif %}
+                            <span class="inline-block w-1.5 h-1.5 rounded-full" style="background:currentColor;"></span>
+                            {{ f.get_status_display }}
+                        </span>
+                    </td>
+                    <td class="px-5 py-3">
+                        <div class="flex items-center gap-3 justify-end">
+                            <a href="{% url 'app:followup_update' f.pk %}"
+                               class="text-[12px] text-[#2d5664] hover:text-[#234854] transition-all duration-200">
+                                تعديل
+                            </a>
+                            <form method="post" action="{% url 'app:followup_delete' f.pk %}"
+                                  onsubmit="return confirm('هل أنت متأكد من حذف هذه المتابعة؟');"
+                                  class="inline">
+                                {% csrf_token %}
+                                <button type="submit"
+                                        class="text-[12px] text-[#a95755] hover:text-[#8a4644] transition-all duration-200">
+                                    حذف
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- ترقيم الصفحات -->
+        {% if page_obj.paginator.num_pages > 1 %}
+        <div class="flex items-center justify-between px-5 py-4 border-t border-[#f0f0ec] text-[12px] text-[#7d918f]">
+            <span>صفحة {{ page_obj.number }} من {{ page_obj.paginator.num_pages }}</span>
+            <div class="flex gap-2">
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}{% if querystring %}&{{ querystring }}{% endif %}"
+                   class="px-3 py-1.5 border border-[#e1e4df] hover:bg-[#f5f6f3] transition-all duration-200">السابق</a>
+                {% endif %}
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if querystring %}&{{ querystring }}{% endif %}"
+                   class="px-3 py-1.5 border border-[#e1e4df] hover:bg-[#f5f6f3] transition-all duration-200">التالي</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% else %}
+        <p class="px-5 py-10 text-center text-[13px] text-[#7d918f]">
+            لا توجد متابعات مطابقة لمعايير البحث.
+        </p>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

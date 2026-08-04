@@ -1,0 +1,72 @@
+      <header class="sticky top-0 z-30 flex h-[78px] items-center justify-between border-b border-[#e5e5e1] bg-[#f8f9f6]/95 px-5 backdrop-blur-md md:px-8 dark:border-slate-800 dark:bg-slate-950/90">
+        <div class="flex items-center gap-4">
+          <button type="button" data-sidebar-open class="flex h-9 w-9 items-center justify-center border border-[#e1e4df] bg-[#fffdfa] text-[#607681] transition-colors hover:border-[#c9d1ce] hover:text-[#274352] lg:hidden" aria-label="فتح القائمة">
+            <svg class="h-4 w-4" aria-hidden="true"><use href="#icon-menu"></use></svg>
+          </button>
+          <div class="hidden h-8 w-px bg-[#e1e4df] md:block"></div>
+          <div>
+            <h1 class="mt-0.5 text-[18px] font-bold text-[#263d49] dark:text-slate-100">{% block page_heading %}{% endblock %}</h1>
+          </div>
+        </div>
+        <div class="relative" data-user-menu>
+          <button
+            type="button"
+            class="flex items-center gap-2.5 text-right transition-opacity hover:opacity-80"
+            data-user-toggle
+            aria-label="فتح قائمة الحساب"
+          >
+            <span class="flex h-9 w-9 items-center justify-center rounded-full bg-[#496c76] text-[11px] font-bold text-[#f7eee2]">
+              {{ request.user.full_name|default:request.user.username|default:"م ك"|slice:":2" }}
+            </span>
+
+            <span class="hidden sm:block">
+              <strong class="block text-[12px] font-semibold text-[#2e4651] dark:text-slate-200">
+                {{ request.user.full_name|default:request.user.username|default:"محاسب المكتب" }}
+              </strong>
+
+              <small class="block text-[10px] text-[#95a2a0]">
+                {{ request.user.get_role_display|default:"مدير النظام" }}
+              </small>
+            </span>
+
+            <svg class="hidden sm:block h-4 w-4 text-[#8b999a]" aria-hidden="true">
+              <use href="#icon-chevron-down"></use>
+            </svg>
+          </button>
+
+
+          <div
+            class="absolute left-0 mt-3 hidden w-48 overflow-hidden border border-[#e5e5e1] bg-white shadow-lg dark:border-slate-700 dark:bg-slate-900"
+            data-user-dropdown
+          >
+
+            <a
+              href="#"
+              class="block px-4 py-3 text-sm text-[#334b57] hover:bg-[#f5f6f3] dark:text-slate-200 dark:hover:bg-slate-800"
+            >
+              الملف الشخصي
+            </a>
+
+
+            <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+
+              <button
+                type="submit"
+                class="flex w-full items-center px-4 py-3 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-slate-800"
+              >
+                تسجيل الخروج
+              </button>
+
+            </form>
+
+          </div>
+        </div>
+        {% block scripts %}
+        <script>
+          document.querySelector("[data-user-toggle]")?.addEventListener("click", () => {
+              document.querySelector("[data-user-dropdown]")?.classList.toggle("hidden");
+          });
+        </script>
+        {% endblock %}
+      </header>

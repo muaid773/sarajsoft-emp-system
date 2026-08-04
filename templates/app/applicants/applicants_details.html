@@ -1,0 +1,472 @@
+{% extends "base.html" %}
+
+{% block page_heading %}
+    عرض {{ applicant.full_name }}
+{% endblock %}
+
+{% block title %}
+    متقدم - {{ applicant.full_name }}
+{% endblock %}
+
+{% block content %}
+
+<div dir="rtl" class="min-h-screen bg-[#f5f6f3] px-5 py-7 md:px-8">
+
+    <div class="mx-auto max-w-7xl">
+
+        <!-- ========================================= -->
+        <!-- Header -->
+        <!-- ========================================= -->
+
+        <div class="mb-6">
+            <h1 class="text-[22px] font-bold text-[#263d49]">
+                {{ applicant.full_name }}
+            </h1>
+
+            <p class="mt-1 text-sm text-[#6b7b80]">
+                بيانات المتقدم وسجل التقديمات والوظائف والشركات
+            </p>
+        </div>
+
+
+        <!-- ========================================= -->
+        <!-- Applicant Information -->
+        <!-- ========================================= -->
+
+        <div class="mb-6 rounded-xl border border-[#e4e5e0] bg-slate-200 p-6 shadow-[0_5px_18px_rgba(43,58,67,0.04)]">
+
+            <div class="mb-6 border-b border-[#dfe3df] pb-4">
+                <h2 class="text-[17px] font-bold text-[#263d49]">
+                    البيانات الأساسية
+                </h2>
+            </div>
+
+
+            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+
+
+                <!-- Full Name -->
+                <div>
+                    <label class="mb-2 block text-[12px] font-medium text-[#405a63]">
+                        الاسم الكامل
+                    </label>
+
+                    <div class="text-sm font-semibold text-[#263d49]">
+                        {{ applicant.full_name|default:"-" }}
+                    </div>
+                </div>
+
+
+                <!-- Phone -->
+                <div>
+                    <label class="mb-2 block text-[12px] font-medium text-[#405a63]">
+                        الهاتف
+                    </label>
+
+                    <div class="text-sm text-[#263d49]">
+                        {{ applicant.phone|default:"-" }}
+                    </div>
+                </div>
+
+
+                <!-- Email -->
+                <div>
+                    <label class="mb-2 block text-[12px] font-medium text-[#405a63]">
+                        البريد الإلكتروني
+                    </label>
+
+                    <div class="text-sm text-[#263d49]">
+                        {{ applicant.email|default:"-" }}
+                    </div>
+                </div>
+
+
+                <!-- Birth Date -->
+                <div>
+                    <label class="mb-2 block text-[12px] font-medium text-[#405a63]">
+                        تاريخ الميلاد
+                    </label>
+
+                    <div class="text-sm text-[#263d49]">
+                        {{ applicant.birth_date|default:"-" }}
+                    </div>
+                </div>
+
+
+                <!-- Gender -->
+                <div>
+                    <label class="mb-2 block text-[12px] font-medium text-[#405a63]">
+                        الجنس
+                    </label>
+
+                    <div class="text-sm text-[#263d49]">
+                        {{ applicant.get_gender_display|default:"-" }}
+                    </div>
+                </div>
+
+
+                <!-- Qualification -->
+                <div>
+                    <label class="mb-2 block text-[12px] font-medium text-[#405a63]">
+                        المؤهل
+                    </label>
+
+                    <div class="text-sm text-[#263d49]">
+                        {{ applicant.get_qualification_display|default:"-" }}
+                    </div>
+                </div>
+
+
+                <!-- Experience -->
+                <div class="md:col-span-2 lg:col-span-3">
+
+                    <label class="mb-2 block text-[12px] font-medium text-[#405a63]">
+                        الخبرات والسجل الوظيفي
+                    </label>
+
+                    <div class="rounded-lg bg-white/60 p-4 text-sm leading-7 text-[#263d49]">
+
+                        {% if applicant.experience %}
+                            {{ applicant.experience|linebreaksbr }}
+                        {% else %}
+                            <span class="text-[#7a878b]">
+                                لا توجد معلومات عن الخبرات.
+                            </span>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- CV -->
+                <div>
+
+                    <label class="mb-2 block text-[12px] font-medium text-[#405a63]">
+                        السيرة الذاتية
+                    </label>
+
+                    {% if applicant.cv_file %}
+
+                        <a
+                            href="{{ applicant.cv_file.url }}"
+                            target="_blank"
+                            class="inline-flex items-center rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
+                        >
+                            عرض السيرة الذاتية
+                        </a>
+
+                    {% else %}
+
+                        <span class="text-sm text-[#7a878b]">
+                            لا توجد سيرة ذاتية
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Notes -->
+                <div class="md:col-span-2">
+
+                    <label class="mb-2 block text-[12px] font-medium text-[#405a63]">
+                        ملاحظات
+                    </label>
+
+                    <div class="rounded-lg bg-white/60 p-4 text-sm leading-7 text-[#263d49]">
+
+                        {% if applicant.notes %}
+                            {{ applicant.notes|linebreaksbr }}
+                        {% else %}
+                            <span class="text-[#7a878b]">
+                                لا توجد ملاحظات.
+                            </span>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ========================================= -->
+        <!-- Applications -->
+        <!-- ========================================= -->
+
+        <div class="rounded-xl border border-[#e4e5e0] bg-white p-6 shadow-[0_5px_18px_rgba(43,58,67,0.04)]">
+
+
+            <!-- Header -->
+            <div class="mb-6 flex flex-col gap-3 border-b border-[#ecece7] pb-5 md:flex-row md:items-center md:justify-between">
+
+                <div>
+
+                    <h2 class="text-[17px] font-bold text-[#263d49]">
+                        سجل التقديمات
+                    </h2>
+
+                    <p class="mt-1 text-sm text-[#6b7b80]">
+                        جميع الشركات والوظائف التي تقدم لها المتقدم
+                    </p>
+
+                </div>
+
+
+                <!-- Number of Applications -->
+                <div class="inline-flex w-fit rounded-full bg-[#eef3f1] px-4 py-2 text-sm font-semibold text-[#2e4d57]">
+
+                    عدد التقديمات:
+
+                    <span class="mr-1">
+                        {{ applicant.applications.all|length }}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            {% if applicant.applications.all %}
+
+
+                <!-- ========================================= -->
+                <!-- Applications Table -->
+                <!-- ========================================= -->
+
+                <div class="overflow-x-auto">
+
+                    <table class="min-w-full border-collapse">
+
+                        <!-- Table Header -->
+                        <thead>
+
+                            <tr class="border-b border-[#e5e8e5] text-right">
+
+                                <th class="whitespace-nowrap px-4 py-4 text-xs font-bold text-[#6b7b80]">
+                                    الشركة
+                                </th>
+
+                                <th class="whitespace-nowrap px-4 py-4 text-xs font-bold text-[#6b7b80]">
+                                    الوظيفة
+                                </th>
+
+                                <th class="whitespace-nowrap px-4 py-4 text-xs font-bold text-[#6b7b80]">
+                                    حالة التقديم
+                                </th>
+
+                                <th class="whitespace-nowrap px-4 py-4 text-xs font-bold text-[#6b7b80]">
+                                    حالة طلب الشركة
+                                </th>
+
+                                <th class="whitespace-nowrap px-4 py-4 text-xs font-bold text-[#6b7b80]">
+                                    تاريخ التقديم
+                                </th>
+
+                                <th class="whitespace-nowrap px-4 py-4 text-xs font-bold text-[#6b7b80]">
+                                    تاريخ التوظيف
+                                </th>
+
+                                <th class="whitespace-nowrap px-4 py-4 text-xs font-bold text-[#6b7b80]">
+                                    الملاحظات
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <!-- Table Body -->
+                        <tbody>
+
+                            {% for application in applicant.applications.all %}
+
+                                <tr class="border-b border-[#f0f1ef] transition hover:bg-[#fafcfb]">
+
+
+                                    <!-- Company -->
+                                    <td class="px-4 py-5">
+
+                                        <div class="font-semibold text-[#263d49]">
+
+                                            {{ application.job_request.company.name|default:"-" }}
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- Job -->
+                                    <td class="px-4 py-5">
+
+                                        <div class="text-sm text-[#405a63]">
+
+                                            {{ application.job_request.job.name|default:"-" }}
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- Application Status -->
+                                    <td class="px-4 py-5">
+
+                                        {% if application.status == "NEW" %}
+
+                                            <span class="inline-flex rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">
+                                                {{ application.get_status_display }}
+                                            </span>
+
+                                        {% elif application.status == "UNDER_REVIEW" %}
+
+                                            <span class="inline-flex rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-700">
+                                                {{ application.get_status_display }}
+                                            </span>
+
+                                        {% elif application.status == "ACCEPTED" %}
+
+                                            <span class="inline-flex rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
+                                                {{ application.get_status_display }}
+                                            </span>
+
+                                        {% elif application.status == "REJECTED" %}
+
+                                            <span class="inline-flex rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700">
+                                                {{ application.get_status_display }}
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="inline-flex rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">
+                                                {{ application.get_status_display|default:application.status }}
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- Company Job Request Status -->
+                                    <td class="px-4 py-5">
+
+                                        <span class="inline-flex rounded-full bg-[#eef3f1] px-3 py-1 text-xs font-semibold text-[#2e4d57]">
+
+                                            {{ application.job_request.get_status_display|default:application.job_request.status }}
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- Application Date -->
+                                    <td class="px-4 py-5 text-sm text-[#51666c]">
+
+                                        {{ application.created_at|date:"Y-m-d H:i" }}
+
+                                    </td>
+
+
+                                    <!-- Employment Date -->
+                                    <td class="px-4 py-5 text-sm text-[#51666c]">
+
+                                        {% if application.employment_date %}
+
+                                            {{ application.employment_date|date:"Y-m-d" }}
+
+                                        {% else %}
+
+                                            <span class="text-[#9aa5a8]">
+                                                -
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- Notes -->
+                                    <td class="px-4 py-5 text-sm text-[#51666c]">
+
+                                        {% if application.notes %}
+
+                                            <div class="max-w-[220px] whitespace-pre-line">
+                                                {{ application.notes }}
+                                            </div>
+
+                                        {% else %}
+
+                                            <span class="text-[#9aa5a8]">
+                                                -
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+            {% else %}
+
+
+                <!-- Empty Applications -->
+
+                <div class="rounded-xl border border-dashed border-[#d8dfdb] bg-[#fafcfb] p-10 text-center">
+
+                    <div class="mb-3 text-3xl">
+                        📋
+                    </div>
+
+                    <h3 class="text-sm font-bold text-[#405a63]">
+                        لا يوجد سجل تقديمات
+                    </h3>
+
+                    <p class="mt-2 text-xs text-[#7a878b]">
+                        لم يقم هذا المتقدم بالتقديم على أي وظيفة حتى الآن.
+                    </p>
+
+                </div>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+
+        <!-- ========================================= -->
+        <!-- Back Button -->
+        <!-- ========================================= -->
+
+        <div class="mt-6">
+
+            <a
+                href="{% url 'app:applicants' %}"
+                class="inline-flex items-center rounded-lg border border-[#dfe4e0] bg-white px-5 py-2.5 text-sm font-semibold text-[#51666c] transition hover:bg-[#f8faf9]"
+            >
+                رجوع إلى قائمة المتقدمين
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+{% endblock content %}

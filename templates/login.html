@@ -1,0 +1,169 @@
+{% load static %}
+<!doctype html>
+<html lang="ar" dir="rtl" class="bg-[#f5f6f3]">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#1e303d" />
+    <title>تسجيل الدخول | مكتب للتوظيف</title>
+    <link rel="icon" href="{% static 'images/favicon.png' %}" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="{% static 'lib/tailwindcss.js'%}"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Tajawal", "Noto Sans Arabic", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+
+  <body class="min-h-screen bg-[#f5f6f3] font-sans text-[#29404d] antialiased dark:bg-slate-950 dark:text-slate-100">
+    <main class="grid min-h-screen lg:grid-cols-[minmax(0,1.05fr)_minmax(480px,0.95fr)]">
+      <section class="relative hidden overflow-hidden bg-[#1e303d] px-10 py-10 text-[#edf3f2] lg:flex lg:flex-col lg:justify-between xl:px-16">
+        <div class="absolute -left-24 top-20 h-72 w-72 border border-[#5a7781]/30"></div>
+        <div class="absolute bottom-16 right-20 h-44 w-44 border border-[#d69e5b]/20"></div>
+        <div class="relative">
+          <div class="flex items-center gap-3">
+              <img src="{% static 'images/comp.png'%}" alt="{{ office_name|default:'شعار المكتب' }}" class="h-14 w-14 object-contain" />
+            <div>
+              <p class="text-lg font-bold tracking-wide text-[#fff7ec]">{{ office_name|default:"مكتب مسار للتوظيف" }}</p>
+              <p class="mt-1 text-xs text-[#9db0b7]">منصة إدارة عمليات التوظيف</p>
+            </div>
+          </div>
+          <div class="mt-28 max-w-xl">
+            <p class="mb-4 text-xs font-semibold tracking-[0.2em] text-[#d69e5b]">مساحة العمل</p>
+            <h1 class="max-w-lg text-4xl font-bold leading-[1.35] text-[#fff9f1] xl:text-5xl">كل عملية توظيف، في مكان واضح.</h1>
+            <p class="mt-6 max-w-md text-sm leading-8 text-[#a8bac0]">تابع طلبات الشركات، المتقدمين، المتابعات، والسندات المالية من خلال مساحة تشغيل واحدة وهادئة.</p>
+          </div>
+        </div>
+        <div class="relative flex items-end justify-between gap-6 border-t border-[#354c59] pt-6">
+          <div>
+            <p class="text-xs font-semibold text-[#dfe9e8]">دخول آمن لفريق المكتب</p>
+            <p class="mt-1 text-[11px] text-[#8ea4ad]">صلاحيات مختلفة للمدير والموظف والمحاسب</p>
+          </div>
+          <div class="text-left">
+              <img src="{% static 'images/comp.png'%}" alt="{{ developer_name|default:'شعار الشركة المطورة' }}" class="ml-auto h-7 max-w-[120px] object-contain" />
+
+          </div>
+        </div>
+      </section>
+
+      <section class="flex min-h-screen items-center justify-center px-5 py-10 sm:px-10">
+        <div class="w-full max-w-[430px]">
+          <div class="mb-8 flex items-center justify-between lg:hidden">
+            <div class="flex items-center gap-3">
+                <img src="{% static 'images/comp.png'%}" alt="{{ office_name|default:'شعار المكتب' }}" class="h-11 w-11 object-contain" />
+              <div>
+                <p class="text-sm font-bold text-[#2b4652] dark:text-slate-100">{{ office_name|default:"مكتب مسار للتوظيف" }}</p>
+                <p class="mt-0.5 text-[10px] text-[#8b9b9d]">منصة إدارة العمليات</p>
+              </div>
+            </div>
+            <span class="text-[10px] text-[#829291]">{{ developer_name|default:"تطوير حلول رقمية" }}</span>
+          </div>
+
+          <div class="border border-[#e1e4df] bg-[#fffdfa] p-6 shadow-[0_18px_45px_rgba(43,58,67,0.07)] sm:p-9 dark:border-slate-800 dark:bg-slate-900">
+            <div class="mb-8">
+              <p class="mb-2 text-xs font-semibold text-[#d08f4f]">مرحبًا بعودتك</p>
+              <h2 class="text-2xl font-bold tracking-tight text-[#29424e] dark:text-slate-100">تسجيل الدخول</h2>
+              <p class="mt-2 text-xs leading-6 text-[#8a9999]">أدخل بيانات حسابك للوصول إلى لوحة المكتب.</p>
+            </div>
+
+            {% if form.non_field_errors %}
+              <div class="mb-5 border border-[#e4b4b0] bg-[#fff5f3] px-4 py-3 text-xs leading-6 text-[#9d5149]" role="alert">
+                {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+              </div>
+            {% endif %}
+
+            {% if messages %}
+              <div class="mb-5 space-y-2" aria-live="polite">
+                {% for message in messages %}
+                  <div class="border border-[#cbdde3] bg-[#f1f8fa] px-4 py-3 text-xs text-[#3f6f7d]" role="status">{{ message }}</div>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            <form method="post" action="" class="space-y-5" novalidate>
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ request.GET.next|default:'' }}" />
+
+              <div>
+                <label for="{{ form.username.id_for_label }}" class="mb-2 block text-xs font-semibold text-[#526a70] dark:text-slate-300">{{ form.username.label }}</label>
+                <input
+                  type="text"
+                  name="{{ form.username.html_name }}"
+                  id="{{ form.username.id_for_label }}"
+                  value="{{ form.username.value|default_if_none:'' }}"
+                  placeholder="اسم المستخدم"
+                  autocomplete="username"
+                  autofocus
+                  class="h-12 w-full border {% if form.username.errors %}border-[#c98287] focus:border-[#c98287] focus:ring-[#f4dddd]{% else %}border-[#dfe4e0] focus:border-[#7d9b9a] focus:ring-[#dce9e5]{% endif %} bg-[#fbfcfa] px-4 text-sm text-[#304854] outline-none transition-all placeholder:text-[#a5b0af] focus:ring-4 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+                />
+                {% for error in form.username.errors %}<p class="mt-2 text-[11px] text-[#a95755]">{{ error }}</p>{% endfor %}
+              </div>
+
+              <div>
+                <div class="mb-2 flex items-center justify-between gap-3">
+                  <label for="{{ form.password.id_for_label }}" class="block text-xs font-semibold text-[#526a70] dark:text-slate-300">{{ form.password.label }}</label>
+                  {% block password_reset_link %}{% endblock %}
+                </div>
+                <div class="relative">
+                  <input
+                    type="password"
+                    name="{{ form.password.html_name }}"
+                    id="{{ form.password.id_for_label }}"
+                    placeholder="كلمة المرور"
+                    autocomplete="current-password"
+                    class="h-12 w-full border {% if form.password.errors %}border-[#c98287] focus:border-[#c98287] focus:ring-[#f4dddd]{% else %}border-[#dfe4e0] focus:border-[#7d9b9a] focus:ring-[#dce9e5]{% endif %} bg-[#fbfcfa] px-4 text-sm text-[#304854] outline-none transition-all placeholder:text-[#a5b0af] focus:ring-4 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+                  />
+                  <button type="button" data-toggle-password class="absolute left-3 top-1/2 -translate-y-1/2 px-1 text-[11px] font-semibold text-[#809391] transition-colors hover:text-[#315968]" aria-label="إظهار كلمة المرور">إظهار</button>
+                </div>
+                {% for error in form.password.errors %}<p class="mt-2 text-[11px] text-[#a95755]">{{ error }}</p>{% endfor %}
+              </div>
+
+              <button type="submit" class="flex h-12 w-full items-center justify-center bg-[#2d5664] text-sm font-bold text-[#fff9f0] shadow-[0_7px_18px_rgba(45,86,100,0.2)] transition-all hover:bg-[#234854] hover:shadow-[0_9px_22px_rgba(45,86,100,0.25)] focus:outline-none focus:ring-4 focus:ring-[#d8e6e3] active:translate-y-px">
+                دخول إلى لوحة المكتب
+              </button>
+            </form>
+
+            <div class="mt-8 border-t border-[#eceeea] pt-5 text-center dark:border-slate-800">
+              <p class="text-[10px] leading-5 text-[#9aa7a4]">إذا واجهت مشكلة في الدخول، تواصل مع مدير النظام.</p>
+              <div class="mt-4 flex items-center justify-center gap-2 text-[10px] text-[#9aa7a4]">
+                {% if developer_logo_url %}
+                  <img src="{% static 'images/comp.png'%}" alt="{{ developer_name|default:'شعار الشركة المطورة' }}" class="h-5 max-w-[90px] object-contain" />
+                {% else %}
+                  <span class="flex h-5 w-5 items-center justify-center border border-[#bcc8c4] text-[9px] font-bold text-[#718582]">ت</span>
+                {% endif %}
+                <span>{{ developer_name|default:"تطوير حلول رقمية" }}</span>
+              </div>
+            </div>
+          </div>
+          <p class="mt-5 text-center text-[10px] text-[#a0aaa6]">© {% now "Y" %} {{ office_name|default:"مكتب مسار للتوظيف" }} — جميع الحقوق محفوظة</p>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      (() => {
+        const password = document.getElementById("{{ form.password.id_for_label }}");
+        const toggle = document.querySelector("[data-toggle-password]");
+        toggle?.addEventListener("click", () => {
+          const visible = password.type === "text";
+          password.type = visible ? "password" : "text";
+          toggle.textContent = visible ? "إظهار" : "إخفاء";
+          toggle.setAttribute("aria-label", visible ? "إظهار كلمة المرور" : "إخفاء كلمة المرور");
+        });
+      })();
+    </script>
+  </body>
+</html>

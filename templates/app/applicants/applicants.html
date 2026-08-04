@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block page_heading %}المتقدمون{% endblock %}
+
+{% block title %}المتقدمون{% endblock %}
+{% block content %}
+<div class="mx-auto max-w-[1440px] space-y-7">
+    <section class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <a href="{% url 'app:applicants_create' %}"
+            class="inline-flex items-center justify-center gap-2 border border-transparent bg-[#2d5664] px-4 py-2.5 text-[12px] font-semibold text-[#fff9f0] shadow-[0_4px_12px_rgba(45,86,100,0.18)] transition-all duration-200 hover:bg-[#234854] dark:bg-[#3b6472] dark:hover:bg-[#315564]">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-[17px] w-[17px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14"></path>
+                <path d="M12 5v14"></path>
+            </svg>
+            إضافة متقدم
+        </a>
+    </section>
+    <section class="border border-[#cfd6cf] bg-[#f4f6f1] p-5 shadow-[0_5px_18px_rgba(43,58,67,0.05)] dark:border-[#334155] dark:bg-[#1e293b] dark:shadow-[0_8px_24px_rgba(0,0,0,0.22)]">
+        <form method="get" class="flex flex-col  md:flex-row md:items-end">
+            <div class="flex-1">
+                <input
+                    id="company-search"
+                    type="text"
+                    name="q"
+                    placeholder="ابحث..."
+                    value="{{ q }}"
+                    class="h-12 w-full border border-[#aeb7af] bg-[#ffffff] px-4 text-[12px] text-[#111827] outline-none transition-all duration-200 placeholder:text-[#6b7280] focus:border-[#2d5664] focus:ring-4 focus:ring-[#d7e1dc] dark:border-[#334155] dark:bg-[#0b1220] dark:text-[#e2e8f0] dark:placeholder:text-[#94a3b8] dark:focus:border-[#7aa3a0] dark:focus:ring-[#20363a]"
+                >
+            </div>
+
+            <div class="flex gap-3">
+                <button type="submit"
+                        class="inline-flex h-12 items-center justify-center gap-2 border border-[#aeb7af] bg-[#ffffff] px-5 text-[12px] font-semibold text-[#111827] transition-all duration-200 hover:border-[#7d8a83] hover:text-[#000000] dark:border-[#334155] dark:bg-[#111827] dark:text-[#cbd5e1] dark:hover:border-[#475569] dark:hover:text-[#f8fafc]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-[16px] w-[16px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.3-4.3"></path>
+                    </svg>
+                    بحث
+                </button>
+
+                <a href="{% url 'app:companies' %}"
+                class="inline-flex h-12 items-center justify-center border border-[#aeb7af] bg-[#ffffff] px-5 text-[12px] font-semibold text-[#111827] transition-all duration-200 hover:border-[#7d8a83] hover:text-[#000000] dark:border-[#334155] dark:bg-[#111827] dark:text-[#cbd5e1] dark:hover:border-[#475569] dark:hover:text-[#f8fafc]">
+                    إعادة
+                </a>
+            </div>
+        </form>
+    </section>
+    <section class="overflow-hidden border border-[#cfd6cf] bg-[#f4f6f1] shadow-[0_5px_18px_rgba(43,58,67,0.05)] dark:border-[#334155] dark:bg-[#1e293b] dark:shadow-[0_8px_24px_rgba(0,0,0,0.22)]">
+        <div class="overflow-x-auto">
+            <table class="w-full text-right">
+                <thead>
+                    <tr class="border-b border-[#cfd6cf] bg-[#e9ede7] dark:border-[#334155] dark:bg-[#172033]">
+                        <th class="px-5 py-3 text-[10px] font-bold tracking-wide text-[#111827] dark:text-[#cbd5e1]">الاسم</th>
+                        <th class="px-5 py-3 text-[10px] font-bold tracking-wide text-[#111827] dark:text-[#cbd5e1]">الهاتف</th>
+                        <th class="px-5 py-3 text-[10px] font-bold tracking-wide text-[#111827] dark:text-[#cbd5e1]">البريد</th>
+                        <th class="px-5 py-3 text-[10px] font-bold tracking-wide text-[#111827] dark:text-[#cbd5e1]">المؤهل</th>
+                        <th class="px-5 py-3 text-[10px] font-bold tracking-wide text-[#111827] dark:text-[#cbd5e1]">ملاحظات</th>
+                        <th class="px-5 py-3 text-[10px] font-bold tracking-wide text-[#111827] dark:text-[#cbd5e1]">الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-[#d9e0d8] dark:divide-[#334155]">
+                    {% for applicant in applicants %}
+                        <tr class="transition-colors hover:bg-[#e2e7e1] dark:hover:bg-[#253346]">
+                            <td class="px-5 py-3.5 text-[12px] font-semibold text-[#111827] dark:text-[#f8fafc]">
+                            {{ applicant.full_name }}
+                            </td>
+                            <td class="px-5 py-3.5 text-[12px] font-semibold text-[#111827] dark:text-[#f8fafc]">
+                            {{ applicant.phone }}
+                            </td>
+                            <td class="px-5 py-3.5 text-[12px] font-semibold text-[#111827] dark:text-[#f8fafc]">
+                            {{ applicant.email }}
+                            </td>
+                            <td class="px-5 py-3.5 text-[12px] font-semibold text-[#111827] dark:text-[#f8fafc]">
+                            {{ applicant.get_qualification_display }}
+                            </td>
+                            <td class="px-5 py-3.5 text-[12px] font-semibold text-[#111827] dark:text-[#f8fafc]">
+                            {{ applicant.notes }}
+                            </td>
+                            <td class="px-5 py-3.5">
+                                <a href="{% url 'app:applicants' applicant.id %}"
+                                    class="inline-flex h-9 items-center gap-1.5 border border-[#aeb7af] bg-[#ffffff] px-3 text-[11px] font-medium text-[#111827] transition-all duration-200 hover:border-[#7d8a83] hover:text-[#000000] dark:border-[#334155] dark:bg-[#111827] dark:text-[#cbd5e1] dark:hover:border-[#475569] dark:hover:text-[#f8fafc]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-[14px] w-[14px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 20h9"></path>
+                                        <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+                                    </svg>
+                                    عرض
+                                </a>
+                                <a href="{% url 'app:applicants_update' applicant.id %}"
+                                    class="inline-flex h-9 items-center gap-1.5 border border-[#aeb7af] bg-[#ffffff] px-3 text-[11px] font-medium text-[#111827] transition-all duration-200 hover:border-[#7d8a83] hover:text-[#000000] dark:border-[#334155] dark:bg-[#111827] dark:text-[#cbd5e1] dark:hover:border-[#475569] dark:hover:text-[#f8fafc]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-[14px] w-[14px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 20h9"></path>
+                                        <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+                                    </svg>
+                                    تعديل
+                                </a>
+                        </td>
+                        </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="px-5 py-14 text-center">
+                            <div class="mx-auto max-w-sm space-y-2">
+                                <div class="text-[13px] font-bold text-[#111827] dark:text-[#f8fafc]">
+                                    لا يوجد متقدمون
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    </section>
+</div>
+{% endblock%}

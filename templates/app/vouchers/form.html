@@ -1,0 +1,336 @@
+{% extends "base.html" %}
+
+{% block title %}{% if form.instance.pk %}تعديل السند{% else %}إضافة سند جديد{% endif %}{% endblock %}
+{% block page_heading %}{% if form.instance.pk %}تعديل السند{% else %}إضافة سند جديد{% endif %}{% endblock %}
+
+{% block content %}
+<div class="space-y-7">
+
+    <a href="{% url 'app:voucher_list' %}"
+       class="inline-flex items-center gap-2 text-[13px] text-[#51666c] hover:text-[#29404d] transition-all duration-200 dark:text-[#94a3b8]">
+        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+        </svg>
+        الرجوع لقائمة السندات
+    </a>
+
+    <div class="bg-[#fffdfa] border border-[#e1e4df] rounded-[2px] p-5
+                dark:bg-[#1e293b] dark:border-[#334155]">
+
+        {{ dependency_form.media }}
+        {% if dependency_ready %}
+            {{ form.media }}
+        {% endif %}
+
+        {% if dependency_form.non_field_errors %}
+        <div class="mb-5 px-4 py-3 bg-[#f4dddd] text-[#a95755]
+                    text-[13px] rounded-[4px] dark:bg-[#0f172a]
+                    dark:text-[#f2b8b5]">
+            {% for error in dependency_form.non_field_errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if form.non_field_errors %}
+        <div class="mb-5 px-4 py-3 bg-[#f4dddd] text-[#a95755]
+                    text-[13px] rounded-[4px] dark:bg-[#0f172a]
+                    dark:text-[#f2b8b5]">
+            {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <section class="mb-7 border-b border-[#eceeea] pb-6
+                        dark:border-[#334155]">
+            <div class="mb-4">
+                <h2 class="text-[15px] font-semibold text-[#29404d]
+                           dark:text-[#e2e8f0]">
+                    إعداد الحقول التابعة
+                </h2>
+                <p class="mt-1 text-[12px] text-[#7d918f]
+                          dark:text-[#94a3b8]">
+                    اختر القيم الأساسية ثم اضغط «عرض الحقول» لتحميل
+                    التصنيف وطلبات الشركة المناسبة.
+                </p>
+            </div>
+
+            <form id="voucher-dependency-form"
+                  method="get"
+                  class="grid grid-cols-1 md:grid-cols-3
+                         gap-x-6 gap-y-5">
+                <div class="flex flex-col gap-1.5">
+                    <label for="{{ dependency_form.type.id_for_label }}"
+                           class="text-[13px] text-[#29404d]
+                                  dark:text-[#cbd5e1]">
+                        نوع السند <span class="text-[#a95755]">*</span>
+                    </label>
+                    {{ dependency_form.type }}
+                    {% for error in dependency_form.type.errors %}
+                        <p class="text-[12px] text-[#a95755]">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                    <label for="{{ dependency_form.company.id_for_label }}"
+                           class="text-[13px] text-[#29404d]
+                                  dark:text-[#cbd5e1]">
+                        الشركة
+                    </label>
+                    {{ dependency_form.company }}
+                    <p class="text-[12px] text-[#7d918f]">
+                        مطلوبة في سند القبض، واختيارية في المصروف العام.
+                    </p>
+                    {% for error in dependency_form.company.errors %}
+                        <p class="text-[12px] text-[#a95755]">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                    <label for="{{ dependency_form.expense_scope.id_for_label }}"
+                           class="text-[13px] text-[#29404d]
+                                  dark:text-[#cbd5e1]">
+                        نوع المصروف
+                    </label>
+                    {{ dependency_form.expense_scope }}
+                    <p class="text-[12px] text-[#7d918f]">
+                        يستخدم مع سند الصرف فقط.
+                    </p>
+                    {% for error in dependency_form.expense_scope.errors %}
+                        <p class="text-[12px] text-[#a95755]">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+
+                <div class="md:col-span-3 flex items-center gap-3">
+                    <button type="submit"
+                            class="inline-flex items-center gap-2 h-10 px-5
+                                   bg-[#2d5664] text-[#fff9f0] text-[13px]
+                                   font-semibold rounded-[6px]
+                                   hover:bg-[#234854] transition-all
+                                   duration-200">
+                        عرض الحقول التابعة
+                    </button>
+                    <a href="{% url 'app:voucher_create' %}"
+                       class="inline-flex items-center h-10 px-4
+                              border border-[#e1e4df] text-[#51666c]
+                              text-[13px] rounded-[6px]
+                              hover:bg-[#f5f6f3] transition-all
+                              dark:border-[#334155] dark:text-[#94a3b8]">
+                        بدء من جديد
+                    </a>
+                </div>
+            </form>
+        </section>
+
+        {% if dependency_ready %}
+        <section>
+            <div class="mb-5">
+                <h2 class="text-[15px] font-semibold text-[#29404d]
+                           dark:text-[#e2e8f0]">
+                    بيانات السند
+                </h2>
+                <p class="mt-1 text-[12px] text-[#7d918f]
+                          dark:text-[#94a3b8]">
+                    بعد إكمال البيانات اضغط «حفظ السند».
+                </p>
+            </div>
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+
+                {{ form.company.as_hidden }}
+                {{ form.type.as_hidden }}
+                {{ form.expense_scope.as_hidden }}
+
+                <div class="md:col-span-2 rounded-[6px]
+                            border border-[#e1e4df] bg-[#fbfcfa]
+                            px-4 py-3 text-[13px] text-[#51666c]
+                            dark:bg-[#0f172a] dark:border-[#334155]
+                            dark:text-[#cbd5e1]">
+                    تم تثبيت الشركة ونوع السند من القسم العلوي.
+                    إذا أردت تغييرهما، استخدم نموذج الإعداد ثم أعد عرض
+                    الحقول التابعة.
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2
+                            gap-x-6 gap-y-5">
+
+                    <div class="flex flex-col gap-1.5">
+                        <label for="{{ form.category.id_for_label }}"
+                               class="text-[13px] text-[#29404d]
+                                      dark:text-[#cbd5e1]">
+                            التصنيف <span class="text-[#a95755]">*</span>
+                        </label>
+                        {{ form.category }}
+                        {% for error in form.category.errors %}
+                            <p class="text-[12px] text-[#a95755]">
+                                {{ error }}
+                            </p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <label for="{{ form.job_request.id_for_label }}"
+                               class="text-[13px] text-[#29404d]
+                                      dark:text-[#cbd5e1]">
+                            طلب الشركة (اختياري)
+                        </label>
+                        {{ form.job_request }}
+                        {% for error in form.job_request.errors %}
+                            <p class="text-[12px] text-[#a95755]">
+                                {{ error }}
+                            </p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <label for="{{ form.amount.id_for_label }}"
+                               class="text-[13px] text-[#29404d]
+                                      dark:text-[#cbd5e1]">
+                            المبلغ <span class="text-[#a95755]">*</span>
+                        </label>
+                        {{ form.amount }}
+                        {% for error in form.amount.errors %}
+                            <p class="text-[12px] text-[#a95755]">
+                                {{ error }}
+                            </p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <label for="{{ form.currency.id_for_label }}"
+                               class="text-[13px] text-[#29404d]
+                                      dark:text-[#cbd5e1]">
+                            العملة
+                        </label>
+                        {{ form.currency }}
+                        {% for error in form.currency.errors %}
+                            <p class="text-[12px] text-[#a95755]">
+                                {{ error }}
+                            </p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <label for="{{ form.voucher_date.id_for_label }}"
+                               class="text-[13px] text-[#29404d]
+                                      dark:text-[#cbd5e1]">
+                            تاريخ السند <span class="text-[#a95755]">*</span>
+                        </label>
+                        {{ form.voucher_date }}
+                        {% for error in form.voucher_date.errors %}
+                            <p class="text-[12px] text-[#a95755]">
+                                {{ error }}
+                            </p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="md:col-span-2 flex flex-col gap-1.5">
+                        <label for="{{ form.description.id_for_label }}"
+                               class="text-[13px] text-[#29404d]
+                                      dark:text-[#cbd5e1]">
+                            البيان <span class="text-[#a95755]">*</span>
+                        </label>
+                        {{ form.description }}
+                        {% for error in form.description.errors %}
+                            <p class="text-[12px] text-[#a95755]">
+                                {{ error }}
+                            </p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 mt-7 pt-5
+                            border-t border-[#f0f0ec]
+                            dark:border-[#334155]">
+                    <button type="submit"
+                            class="inline-flex items-center gap-2 h-10 px-5
+                                   bg-[#2d5664] text-[#fff9f0] text-[13px]
+                                   font-semibold rounded-[6px]
+                                   hover:bg-[#234854] transition-all
+                                   duration-200">
+                        حفظ السند
+                    </button>
+                    <a href="{% url 'app:voucher_list' %}"
+                       class="inline-flex items-center gap-2 h-10 px-5
+                              bg-[#fffdfa] border border-[#e1e4df]
+                              text-[#51666c] text-[13px] rounded-[6px]
+                              hover:bg-[#f5f6f3] transition-all
+                              dark:bg-[#1e293b] dark:border-[#334155]
+                              dark:text-[#94a3b8]">
+                        إلغاء
+                    </a>
+                </div>
+            </form>
+        {% else %}
+            <div class="rounded-[6px] border border-[#e1e4df]
+                        bg-[#fbfcfa] px-4 py-4 text-[13px] text-[#51666c]
+                        dark:bg-[#0f172a] dark:border-[#334155]
+                        dark:text-[#cbd5e1]">
+                اختر نوع السند، ثم اضغط «عرض الحقول التابعة» لعرض باقي
+                النموذج.
+            </div>
+        {% endif %}
+    </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const dependencyForm = document.getElementById(
+        "voucher-dependency-form"
+    );
+    if (!dependencyForm) return;
+
+    const typeField = dependencyForm.querySelector(
+        '[name="type"]'
+    );
+    const companyField = dependencyForm.querySelector(
+        '[name="company"]'
+    );
+    const scopeField = dependencyForm.querySelector(
+        '[name="expense_scope"]'
+    );
+
+    let submitTimer = null;
+
+    function submitDependencies() {
+        // نوع السند هو الحقل الأساسي. لا نرسل طلبًا ناقصًا
+        // أثناء بداية الصفحة قبل اختيار النوع.
+        if (!typeField || !typeField.value) return;
+
+        window.clearTimeout(submitTimer);
+        submitTimer = window.setTimeout(function () {
+            dependencyForm.submit();
+        }, 80);
+    }
+
+    [typeField, companyField, scopeField].forEach(function (field) {
+        if (!field) return;
+
+        if (window.jQuery) {
+            window.jQuery(field)
+                .off(".voucherDependencyRedraw")
+                .on(
+                    "change.voucherDependencyRedraw " +
+                    "select2:select.voucherDependencyRedraw " +
+                    "select2:clear.voucherDependencyRedraw",
+                    submitDependencies
+                );
+        } else {
+            field.addEventListener(
+                "change",
+                submitDependencies
+            );
+        }
+    });
+});
+</script>
+{% endblock %}

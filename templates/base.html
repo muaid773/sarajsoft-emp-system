@@ -1,0 +1,417 @@
+{% load static %}
+<!doctype html>
+<html lang="ar" dir="rtl" class="bg-[#f5f6f3]">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#1e303d">
+    <title>مكتب للتوظيف - {% block title %}{% endblock %}</title>
+    <link rel="icon" href="{% static 'images/favicon.png' %}" type="image/png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    >
+
+    {{ form.media.css }}
+    <script src="{% static 'lib/jquery.js' %}"></script>
+    {{ form.media.js }}
+
+    <script src="{% static 'lib/tailwindcss.js' %}"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Tajawal", "Noto Sans Arabic", "sans-serif"],
+            },
+            colors: {
+              ink: "#29404d",
+              roseLine: "#c97870",
+              roseSoft: "#fff7f5",
+              roseDeep: "#a95755",
+            },
+          },
+        },
+      };
+    </script>
+    {% block extra_head %}{% endblock %}
+  </head>
+
+  <body class="min-h-screen bg-[#f5f6f3] font-sans text-[#29404d] antialiased dark:bg-slate-950 dark:text-slate-100">
+    <svg aria-hidden="true" class="hidden">
+      <symbol id="icon-dashboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+        <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+        <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+        <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+      </symbol>
+      <symbol id="icon-clipboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="5" y="4" width="14" height="17" rx="2"></rect>
+        <path d="M9 4.5V3h6v1.5M9 10h6M9 14h4"></path>
+      </symbol>
+      <symbol id="icon-file-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <path d="M14 2v6h6M8 14l2 2 5-5"></path>
+      </symbol>
+      <symbol id="icon-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
+      </symbol>
+      <symbol id="icon-building" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 21h18M5 21V5l7-3 7 3v16M9 8h1M14 8h1M9 12h1M14 12h1M9 16h1M14 16h1"></path>
+      </symbol>
+      <symbol id="icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4" width="18" height="17" rx="2"></rect>
+        <path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"></path>
+      </symbol>
+      <symbol id="icon-receipt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 3v18l3-2 3 2 3-2 3 2 4-2V3l-4 2-3-2-3 2-3-2-3 2Z"></path>
+        <path d="M8 9h8M8 13h6"></path>
+      </symbol>
+      <symbol id="icon-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 3v18h18"></path>
+        <path d="M7 16l4-5 3 3 5-7"></path>
+      </symbol>
+      <symbol id="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <path d="M4 6h16M4 12h16M4 18h16"></path>
+      </symbol>
+      <symbol id="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <path d="m6 6 12 12M18 6 6 18"></path>
+      </symbol>
+      <symbol id="icon-chevron-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m15 18-6-6 6-6"></path>
+      </symbol>
+      <symbol id="icon-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m6 9 6 6 6-6"></path>
+      </symbol>
+      <symbol id="icon-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="4"></circle>
+        <path d="M4 21a8 8 0 0 1 16 0"></path>
+      </symbol>
+    </svg>
+
+    <div id="sidebar-backdrop" class="fixed inset-0 z-40 hidden bg-slate-950/50 backdrop-blur-[1px] lg:hidden" aria-hidden="true"></div>
+
+    <aside
+      id="app-sidebar"
+      class="fixed inset-y-0 right-0 z-50 flex w-[268px] translate-x-full flex-col border-l-[3px] border-[#c97870] bg-[#1e303d] text-[#dce5e7] shadow-2xl transition-[width,transform] duration-300 lg:translate-x-0 dark:border-slate-700 dark:bg-slate-900"
+      aria-label="القائمة الجانبية"
+    >
+      <div class="flex h-[78px] shrink-0 items-center justify-between border-b border-[#354c59] px-5">
+        <a href="{% url 'app:dashboard_view' %}" class="flex min-w-0 items-center gap-3" aria-label="العودة إلى الرئيسية">
+          <span class="grid h-10 w-10 shrink-0 place-items-center border border-[#c97870] bg-[#263746] text-[#e1ad6a]">
+            <img src="{% static 'images/comp.png' %}" alt="{{ office_name|default:'شعار المكتب' }}" class="h-8 w-8 object-contain">
+          </span>
+          <span data-sidebar-label class="min-w-0 transition-opacity duration-200">
+            <strong class="block truncate text-[15px] tracking-wide text-[#fff7ec]">{{ office_name|default:"مكتب مسار للتوظيف" }}</strong>
+            <small class="mt-0.5 block text-[10px] text-[#91a6b1]">منصة إدارة العمليات</small>
+          </span>
+        </a>
+        <button type="button" data-sidebar-collapse class="hidden shrink-0 rounded-md p-1.5 text-[#8ea1ab] transition-colors hover:bg-[#2c4351] hover:text-[#f4eadc] lg:block" aria-label="طي القائمة الجانبية" aria-expanded="true">
+          <svg class="h-4 w-4" aria-hidden="true"><use href="#icon-chevron-left"></use></svg>
+        </button>
+        <button type="button" data-sidebar-close class="shrink-0 rounded-md p-1.5 text-[#8ea1ab] transition-colors hover:bg-[#2c4351] hover:text-[#f4eadc] lg:hidden" aria-label="إغلاق القائمة">
+          <svg class="h-4 w-4" aria-hidden="true"><use href="#icon-close"></use></svg>
+        </button>
+      </div>
+
+      <div class="flex-1 overflow-y-auto px-3 py-5">
+{% with current_url_name=request.resolver_match.url_name %}
+<nav aria-label="القائمة الرئيسية" class="space-y-5">
+  <section>
+    <p
+      data-sidebar-label
+      class="mb-2 px-3 text-[10px] font-semibold tracking-[0.12em] text-[#718894]"
+    >
+      مساحة العمل
+    </p>
+
+    <a
+      href="{% url 'app:dashboard_view' %}"
+      class="{% if current_url_name == 'dashboard_view' %}border-[#d49b55] bg-[#263746] text-[#fff8ed] shadow-[inset_-3px_0_0_#d49b55]{% else %}border-transparent text-[#9aacb9] hover:border-[#486174] hover:bg-[#223442] hover:text-[#f4eee5]{% endif %} group flex items-center gap-3 border-r-2 px-3 py-2.5 text-[13px] transition-all duration-200"
+      title="نظرة عامة"
+    >
+      <svg class="h-[17px] w-[17px] shrink-0 text-[#e1ad6a]" aria-hidden="true">
+        <use href="#icon-dashboard"></use>
+      </svg>
+      <span data-sidebar-label class="min-w-0 flex-1 truncate">نظرة عامة</span>
+    </a>
+  </section>
+
+  <!-- الشركات -->
+  <section>
+    <p
+      data-sidebar-label
+      class="mb-2 px-3 text-[10px] font-semibold tracking-[0.12em] text-[#718894]"
+    >
+      الشركات
+    </p>
+
+    <div class="space-y-1">
+      <a
+        href="{% url 'app:companies' %}"
+        data-nav-key="companies"
+         class="{% if current_url_name == 'companies' or current_url_name == 'company_create' or current_url_name == 'company_update' %}border-[#d49b55] bg-[#263746] text-[#fff8ed] shadow-[inset_-3px_0_0_#d49b55]{% else %}border-transparent text-[#9aacb9] hover:border-[#486174] hover:bg-[#223442] hover:text-[#f4eee5]{% endif %} group flex items-center gap-3 border-r-2 px-3 py-2.5 text-[13px] transition-all duration-200"
+        title="الشركات"
+      >
+        <svg class="h-[17px] w-[17px] shrink-0 text-[#7f95a4]" aria-hidden="true">
+          <use href="#icon-building"></use>
+        </svg>
+        <span data-sidebar-label class="min-w-0 flex-1 truncate">الشركات</span>
+      </a>
+
+      <a
+        href="{% url 'app:companies_requests' %}"
+        data-nav-key="company-requests"
+         class="{% if current_url_name == 'companies_requests' or current_url_name == 'companies_requests_create' or current_url_name == 'companies_requests_update' %}border-[#d49b55] bg-[#263746] text-[#fff8ed] shadow-[inset_-3px_0_0_#d49b55]{% else %}border-transparent text-[#9aacb9] hover:border-[#486174] hover:bg-[#223442] hover:text-[#f4eee5]{% endif %} group flex items-center gap-3 border-r-2 px-3 py-2.5 text-[13px] transition-all duration-200"
+        title="طلبات الشركات"
+      >
+        <svg class="h-[17px] w-[17px] shrink-0 text-[#7f95a4]" aria-hidden="true">
+          <use href="#icon-clipboard"></use>
+        </svg>
+        <span data-sidebar-label class="min-w-0 flex-1 truncate">طلبات الشركات</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- التوظيف -->
+  <section>
+    <p
+      data-sidebar-label
+      class="mb-2 px-3 text-[10px] font-semibold tracking-[0.12em] text-[#718894]"
+    >
+      التوظيف
+    </p>
+
+    <div class="space-y-1">
+
+      <a
+        href="{% url 'app:applicants'%}"
+        data-nav-key="applicants"
+         class="{% if current_url_name == 'applicants' or current_url_name == 'applicants_create' or current_url_name == 'applicants_update' or current_url_name == 'applicant_detail' %}border-[#d49b55] bg-[#263746] text-[#fff8ed] shadow-[inset_-3px_0_0_#d49b55]{% else %}border-transparent text-[#9aacb9] hover:border-[#486174] hover:bg-[#223442] hover:text-[#f4eee5]{% endif %} group flex items-center gap-3 border-r-2 px-3 py-2.5 text-[13px] transition-all duration-200"
+        title="المتقدمون"
+      >
+        <svg class="h-[17px] w-[17px] shrink-0 text-[#7f95a4]" aria-hidden="true">
+          <use href="#icon-users"></use>
+        </svg>
+        <span data-sidebar-label class="min-w-0 flex-1 truncate">المتقدمون</span>
+      </a>
+
+      <a
+        href="{% url 'app:applications' %}"
+        data-nav-key="applications"
+         class="{% if current_url_name == 'applications' or current_url_name == 'applications_create' or current_url_name == 'applications_update' %}border-[#d49b55] bg-[#263746] text-[#fff8ed] shadow-[inset_-3px_0_0_#d49b55]{% else %}border-transparent text-[#9aacb9] hover:border-[#486174] hover:bg-[#223442] hover:text-[#f4eee5]{% endif %} group flex items-center gap-3 border-r-2 px-3 py-2.5 text-[13px] transition-all duration-200"
+        title="ترشسح متقدمين"
+      >
+        <svg class="h-[17px] w-[17px] shrink-0 text-[#7f95a4]" aria-hidden="true">
+          <use href="#icon-file-check"></use>
+        </svg>
+        <span data-sidebar-label class="min-w-0 flex-1 truncate">ترشسح متقدمين</span>
+      </a>
+
+      <a
+        href="{% url 'app:followup' %}"
+        data-nav-key="follow-ups"
+         class="{% if current_url_name == 'followup' or current_url_name == 'followup_list' or current_url_name == 'followup_create' or current_url_name == 'followup_update' or current_url_name == 'followup_delete' or current_url_name == 'followup_toggle_status' %}border-[#d49b55] bg-[#263746] text-[#fff8ed] shadow-[inset_-3px_0_0_#d49b55]{% else %}border-transparent text-[#9aacb9] hover:border-[#486174] hover:bg-[#223442] hover:text-[#f4eee5]{% endif %} group flex items-center gap-3 border-r-2 px-3 py-2.5 text-[13px] transition-all duration-200"
+        title="سجل المتابعات"
+      >
+        <svg class="h-[17px] w-[17px] shrink-0 text-[#7f95a4]" aria-hidden="true">
+          <use href="#icon-calendar"></use>
+        </svg>
+        <span data-sidebar-label class="min-w-0 flex-1 truncate">سجل المتابعات</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- المالية -->
+  <section>
+    <p
+      data-sidebar-label
+      class="mb-2 px-3 text-[10px] font-semibold tracking-[0.12em] text-[#718894]"
+    >
+      المالية
+    </p>
+
+    <div class="space-y-1">
+      <a
+        href="{% url 'app:voucher_list' %}"
+        data-nav-key="vouchers"
+         class="{% if current_url_name == 'voucher_list' or current_url_name == 'voucher_create' or current_url_name == 'voucher_detail' or current_url_name == 'voucher_update' or current_url_name == 'voucher_delete' or current_url_name == 'vouchercategory_list' or current_url_name == 'vouchercategory_create' or current_url_name == 'vouchercategory_update' or current_url_name == 'vouchercategory_delete' %}border-[#d49b55] bg-[#263746] text-[#fff8ed] shadow-[inset_-3px_0_0_#d49b55]{% else %}border-transparent text-[#9aacb9] hover:border-[#486174] hover:bg-[#223442] hover:text-[#f4eee5]{% endif %} group flex items-center gap-3 border-r-2 px-3 py-2.5 text-[13px] transition-all duration-200"
+        title="السندات"
+      >
+        <svg class="h-[17px] w-[17px] shrink-0 text-[#7f95a4]" aria-hidden="true">
+          <use href="#icon-receipt"></use>
+        </svg>
+        <span data-sidebar-label class="min-w-0 flex-1 truncate">السندات</span>
+      </a>
+
+      <a
+        href="{% url 'app:reports' %}"
+        data-nav-key="reports"
+         class="{% if current_url_name == 'reports' or current_url_name == 'companies-report' or current_url_name == 'applicants-report' or current_url_name == 'accepted-applicants-report' or current_url_name == 'financial-report' or current_url_name == 'export-report-csv' or current_url_name == 'export-report-pdf' %}border-[#d49b55] bg-[#263746] text-[#fff8ed] shadow-[inset_-3px_0_0_#d49b55]{% else %}border-transparent text-[#9aacb9] hover:border-[#486174] hover:bg-[#223442] hover:text-[#f4eee5]{% endif %} group flex items-center gap-3 border-r-2 px-3 py-2.5 text-[13px] transition-all duration-200"
+        title="التقارير"
+      >
+        <svg
+          class="h-[17px] w-[17px] shrink-0 text-[#7f95a4] group-hover:text-[#e1ad6a]"
+          aria-hidden="true"
+        >
+          <use href="#icon-chart"></use>
+        </svg>
+
+        <span data-sidebar-label class="min-w-0 flex-1 truncate">
+          التقارير
+        </span>
+      </a>
+    </div>
+  </section>
+</nav>
+{% endwith %}
+      </div>
+
+      <div class="border-t border-[#354c59] px-4 py-3">
+        <p data-sidebar-label class="text-[10px] leading-5 text-[#91a6b1]">نظام إدارة التوظيف والعمليات المالية</p>
+      </div>
+    </aside>
+
+    <main id="main-content" class="min-h-screen mr-0 border-r border-transparent transition-[margin] duration-300 lg:mr-[268px] dark:border-slate-800">
+      <header class="sticky top-0 z-30 flex h-[78px] items-center justify-between border-b border-[#e1e4df] bg-[#f8f9f6]/95 px-5 shadow-[0_2px_14px_rgba(41,64,77,0.04)] backdrop-blur-md md:px-8 dark:border-slate-800 dark:bg-slate-950/90">
+        <div class="flex items-center gap-4">
+          <button type="button" data-sidebar-open class="flex h-9 w-9 items-center justify-center border border-[#c97870] bg-[#fffdfa] text-[#607681] transition-colors hover:bg-[#fff7f5] hover:text-[#29404d] lg:hidden" aria-label="فتح القائمة">
+            <svg class="h-4 w-4" aria-hidden="true"><use href="#icon-menu"></use></svg>
+          </button>
+          <div class="hidden h-8 w-px bg-[#e1e4df] md:block"></div>
+          <div>
+            <p class="text-[11px] font-medium text-[#8b999a]">{% block date_label %}{% endblock %}</p>
+            <h1 class="mt-0.5 text-[18px] font-bold text-[#263d49] dark:text-slate-100">{% block page_heading %}{% endblock %}</h1>
+          </div>
+        </div>
+
+        <div class="relative" data-user-menu>
+          <button type="button" class="flex items-center gap-2.5 text-right transition-opacity hover:opacity-80" data-user-toggle aria-label="فتح قائمة الحساب" aria-expanded="false">
+            <span class="grid h-9 w-9 place-items-center border border-[#c97870] bg-[#496c76] text-[#f7eee2]">
+              <svg class="h-[18px] w-[18px]" aria-hidden="true"><use href="#icon-user"></use></svg>
+            </span>
+            <span class="hidden sm:block">
+              <strong class="block text-[12px] font-semibold text-[#2e4651] dark:text-slate-200">
+                {{ request.user.get_full_name|default:request.user.username|default:"مستخدم النظام" }}
+              </strong>
+                <small class="block text-[10px] text-[#95a2a0]">
+                {{ request.user.get_role_display|default:"مدير النظام" }}
+              </small>
+            </span>
+            <svg class="hidden h-4 w-4 text-[#9b7776] sm:block" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+          </button>
+
+          <div class="absolute left-0 mt-3 hidden w-48 overflow-hidden border border-[#c97870] bg-[#fffdfa] shadow-lg dark:border-slate-700 dark:bg-slate-900" data-user-dropdown>
+            <a href="#" class="block border-b border-[#e1e4df] px-4 py-3 text-sm text-[#334b57] hover:bg-[#f5f6f3] dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
+              الملف الشخصي
+            </a>
+            <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="flex w-full items-center px-4 py-3 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-slate-800">
+                تسجيل الخروج
+              </button>
+            </form>
+          </div>
+        </div>
+      </header>
+
+      {% if messages %}
+        <div class="mx-auto max-w-[1440px] space-y-2 px-5 pt-5 md:px-8" aria-live="polite">
+          {% for message in messages %}
+            <div class="{% if 'error' in message.tags %}border-[#e4b4b0] bg-[#fff5f3] text-[#9d5149]{% elif 'success' in message.tags %}border-[#b9dcca] bg-[#f1faf4] text-[#28745c]{% else %}border-[#c97870] bg-[#fff8f6] text-[#8d5d5b]{% endif %} flex items-center justify-between border-r-[3px] px-4 py-3 text-[12px]" role="alert">
+              <span>{{ message }}</span>
+              <button type="button" data-dismiss-message class="mr-4 text-current opacity-60 transition-opacity hover:opacity-100" aria-label="إغلاق الرسالة">
+                <svg class="h-4 w-4" aria-hidden="true"><use href="#icon-close"></use></svg>
+              </button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="mx-auto max-w-[1440px] border-x border-[#e1e4df] bg-[#f5f6f3] px-5 py-7 md:px-8 dark:border-slate-800 dark:bg-slate-950">
+        {% block content %}{% endblock %}
+      </div>
+    </main>
+
+    <script>
+      (() => {
+        const sidebar = document.getElementById("app-sidebar");
+        const main = document.getElementById("main-content");
+        const backdrop = document.getElementById("sidebar-backdrop");
+        const labels = document.querySelectorAll("[data-sidebar-label]");
+        const collapseButton = document.querySelector("[data-sidebar-collapse]");
+        const openButton = document.querySelector("[data-sidebar-open]");
+        const closeButton = document.querySelector("[data-sidebar-close]");
+        let collapsed = false;
+
+        const setCollapsed = (value) => {
+          collapsed = value;
+          sidebar.classList.toggle("w-[268px]", !value);
+          sidebar.classList.toggle("w-[84px]", value);
+          main.classList.toggle("lg:mr-[268px]", !value);
+          main.classList.toggle("lg:mr-[84px]", value);
+          labels.forEach((label) => label.classList.toggle("hidden", value));
+          collapseButton?.setAttribute("aria-expanded", String(!value));
+          localStorage.setItem("sidebar-collapsed", String(value));
+        };
+
+        const openMobileSidebar = () => {
+          sidebar.classList.remove("translate-x-full");
+          backdrop.classList.remove("hidden");
+          document.body.classList.add("overflow-hidden");
+        };
+
+        const closeMobileSidebar = () => {
+          sidebar.classList.add("translate-x-full");
+          backdrop.classList.add("hidden");
+          document.body.classList.remove("overflow-hidden");
+        };
+
+        if (window.innerWidth >= 1024 && localStorage.getItem("sidebar-collapsed") === "true") {
+          setCollapsed(true);
+        }
+
+        collapseButton?.addEventListener("click", () => setCollapsed(!collapsed));
+        openButton?.addEventListener("click", openMobileSidebar);
+        closeButton?.addEventListener("click", closeMobileSidebar);
+        backdrop?.addEventListener("click", closeMobileSidebar);
+
+        window.addEventListener("resize", () => {
+          if (window.innerWidth >= 1024) {
+            sidebar.classList.remove("translate-x-full");
+            backdrop.classList.add("hidden");
+            document.body.classList.remove("overflow-hidden");
+          } else {
+            sidebar.classList.add("translate-x-full");
+          }
+        });
+
+        document.querySelectorAll("[data-dismiss-message]").forEach((button) => {
+          button.addEventListener("click", () => button.closest("[role='alert']")?.remove());
+        });
+
+        const userToggle = document.querySelector("[data-user-toggle]");
+        const userDropdown = document.querySelector("[data-user-dropdown]");
+        userToggle?.addEventListener("click", (event) => {
+          event.stopPropagation();
+          const isHidden = userDropdown?.classList.toggle("hidden");
+          userToggle.setAttribute("aria-expanded", String(!isHidden));
+        });
+
+        document.addEventListener("click", (event) => {
+          if (!event.target.closest("[data-user-menu]")) {
+            userDropdown?.classList.add("hidden");
+            userToggle?.setAttribute("aria-expanded", "false");
+          }
+        });
+      })();
+    </script>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

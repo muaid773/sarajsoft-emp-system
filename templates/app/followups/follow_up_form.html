@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}{% if is_edit %}تعديل متابعة{% else %}إضافة متابعة{% endif %}{% endblock %}
+{% block page_heading %}{% if is_edit %}تعديل متابعة{% else %}إضافة متابعة جديدة{% endif %}{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl">
+    <form method="post" class="bg-[#fffdfa] border border-[#e1e4df] p-6 space-y-5">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="bg-[#f4dddd] text-[#a95755] text-[13px] px-4 py-3">
+            {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="flex flex-col gap-1.5">
+                <label class="text-[13px] text-[#51666c]">{{ form.company.label }}</label>
+                {{ form.company }}
+                {% if form.company.errors %}
+                <p class="text-[11px] text-[#a95755]">{{ form.company.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+                <label class="text-[13px] text-[#51666c]">{{ form.applicant.label }}</label>
+                {{ form.applicant }}
+                {% if form.applicant.errors %}
+                <p class="text-[11px] text-[#a95755]">{{ form.applicant.errors.0 }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <p class="text-[11px] text-[#7d918f]">
+            حدّد الشركة أو المتقدم — لا يمكن اختيار الاثنين معاً، ولا تركهما فارغين.
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div class="flex flex-col gap-1.5">
+                <label class="text-[13px] text-[#51666c]">{{ form.follow_up_date.label }}</label>
+                {{ form.follow_up_date }}
+                {% if form.follow_up_date.errors %}
+                <p class="text-[11px] text-[#a95755]">{{ form.follow_up_date.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+                <label class="text-[13px] text-[#51666c]">{{ form.status.label }}</label>
+                {{ form.status }}
+                {% if form.status.errors %}
+                <p class="text-[11px] text-[#a95755]">{{ form.status.errors.0 }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+            <label class="text-[13px] text-[#51666c]">{{ form.note.label }}</label>
+            {{ form.note }}
+            {% if form.note.errors %}
+            <p class="text-[11px] text-[#a95755]">{{ form.note.errors.0 }}</p>
+            {% endif %}
+        </div>
+
+        <div class="flex items-center gap-3 pt-2">
+            <button type="submit"
+                    class="h-12 px-6 bg-[#2d5664] text-[#fff9f0] text-[13px] font-semibold
+                        rounded-[4px] hover:bg-[#234854] transition-all duration-200">
+                {% if is_edit %}حفظ التعديلات{% else %}إضافة المتابعة{% endif %}
+            </button>
+            <a href="{% url 'app:followup_list' %}"
+            class="h-12 flex items-center px-6 text-[13px] text-[#51666c]
+                    hover:text-[#29404d] transition-all duration-200">
+                إلغاء
+            </a>
+            {% if is_edit %}
+            <form method="post" action="{% url 'app:followup_delete' followup.pk %}"
+                onsubmit="return confirm('هل أنت متأكد من حذف هذه المتابعة؟');"
+                class="mr-auto">
+                {% csrf_token %}
+                <button type="submit"
+                        class="h-12 px-5 text-[13px] text-[#a95755] hover:text-[#8a4644] transition-all duration-200">
+                    حذف المتابعة
+                </button>
+            </form>
+            {% endif %}
+        </div>
+    </form>
+</div>
+{% endblock %}

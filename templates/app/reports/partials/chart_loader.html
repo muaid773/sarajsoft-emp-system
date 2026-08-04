@@ -1,0 +1,133 @@
+{% load static %}
+<script src="{% static 'lib/char.js' %}"></script>
+<script>
+  window.reportReady = false;
+  document.addEventListener("DOMContentLoaded", function () {
+    if (typeof Chart === "undefined") {
+      window.reportReadyError = "تعذر تحميل مكتبة Chart.js من static/lib/char.js";
+      return;
+    }
+    const colors = {
+      navy: "#2d5664",
+      gold: "#d49b55",
+      green: "#28745c",
+      blue: "#466b9c",
+      red: "#a95755",
+      finance: "#875b53",
+      grid: "#e8ebe7",
+      text: "#51666c"
+    };
+    Chart.defaults.font.family = "'Tajawal', 'Noto Sans Arabic', Arial, sans-serif";
+    Chart.defaults.font.size = 11;
+    Chart.defaults.color = colors.text;
+    Chart.defaults.plugins.legend.rtl = true;
+    Chart.defaults.plugins.legend.textDirection = "rtl";
+    Chart.defaults.plugins.legend.position = "bottom";
+
+    function readJson(id) {
+      const element = document.getElementById(id);
+      return element ? JSON.parse(element.textContent) : [];
+    }
+
+    function canvas(id) {
+      const element = document.getElementById(id);
+      return element ? document.getElementById(id).getContext("2d") : null;
+    }
+
+    function number(value) {
+      return Number(value || 0);
+    }
+
+    const financial = readJson("financial-currency-data");
+    const financialContext = canvas("financialCurrencyChart");
+    if (financialContext && financial.length) {
+      new Chart(financialContext, {
+        type: "bar",
+        data: {
+          labels: financial.map(item => item.label),
+          datasets: [
+            { label: "الإيرادات", data: financial.map(item => number(item.revenue)), backgroundColor: colors.green },
+            { label: "المصروفات", data: financial.map(item => number(item.expenses)), backgroundColor: colors.finance },
+            { label: "الصافي", data: financial.map(item => number(item.net)), backgroundColor: colors.gold }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, grid: { color: colors.grid } } } }
+      });
+    }
+
+    const applicationStatus = readJson("application-status-data");
+    const applicationStatusContext = canvas("applicationStatusChart");
+    if (applicationStatusContext && applicationStatus.length) {
+      new Chart(applicationStatusContext, {
+        type: "doughnut",
+        data: {
+          labels: applicationStatus.map(item => item.label),
+          datasets: [{ data: applicationStatus.map(item => item.value), backgroundColor: [colors.blue, colors.gold, colors.green, colors.red, colors.navy, "#7d918f"] }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, cutout: "64%" }
+      });
+    }
+
+    const companies = readJson("company-chart-data");
+    const companiesContext = canvas("companyChart");
+    if (companiesContext && companies.length) {
+      new Chart(companiesContext, {
+        type: "bar",
+        data: {
+          labels: companies.map(item => item.label),
+          datasets: [{ label: "المقبولون", data: companies.map(item => item.value), backgroundColor: colors.navy }]
+        },
+        options: { indexAxis: "y", responsive: true, maintainAspectRatio: false, scales: { x: { beginAtZero: true, grid: { color: colors.grid } }, y: { grid: { display: false } } } }
+      });
+    }
+
+    const applicants = readJson("applicant-status-data");
+    const applicantsContext = canvas("applicantStatusChart");
+    if (applicantsContext && applicants.length) {
+      new Chart(applicantsContext, {
+        type: "doughnut",
+        data: {
+          labels: applicants.map(item => item.label),
+          datasets: [{ data: applicants.map(item => item.value), backgroundColor: [colors.blue, colors.green, colors.red, colors.gold, colors.navy, "#7d918f"] }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, cutout: "64%" }
+      });
+    }
+
+    const accepted = readJson("accepted-currency-data");
+    const acceptedContext = canvas("acceptedCurrencyChart");
+    if (acceptedContext && accepted.length) {
+      new Chart(acceptedContext, {
+        type: "bar",
+        data: {
+          labels: accepted.map(item => item.label),
+          datasets: [{ label: "إجمالي الرسوم", data: accepted.map(item => number(item.value)), backgroundColor: colors.gold }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, grid: { color: colors.grid } } } }
+      });
+    }
+
+    const monthly = readJson("monthly-chart-data");
+    const monthlyContext = canvas("monthlyChart");
+    if (monthlyContext && monthly.length) {
+      new Chart(monthlyContext, {
+        type: "bar",
+        data: {
+          labels: monthly.map(item => item.label),
+          datasets: [
+            { label: "الإيرادات", data: monthly.map(item => number(item.revenue)), backgroundColor: colors.green },
+            { label: "المصروفات", data: monthly.map(item => number(item.expenses)), backgroundColor: colors.finance }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, grid: { color: colors.grid } } } }
+      });
+    }
+
+    // ننتظر إطارًا إضافيًا حتى ينتهي Chart.js من رسم الـ canvas قبل الطباعة.
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        window.reportReady = true;
+      });
+    });
+  });
+</script>

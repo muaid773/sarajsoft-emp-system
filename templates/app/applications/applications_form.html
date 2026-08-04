@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block page_heading %}الشركات{% endblock %}
+
+{% block title %}الشركات{% endblock %}
+{% block content %}
+<div dir="rtl" class="min-h-screen bg-[#f5f6f3] px-5 py-7 md:px-8">
+    <div class="mx-auto max-w-[850px]">
+        <!-- Header -->
+        <div class="mb-6">
+            <h1 class="text-[18px] font-bold text-[#263d49]">{{ title }}</h1>
+        </div>
+        <!-- Card -->
+         <form method="post" class="border border-[#e4e5e0] bg-slate-300 rounded-xl p-6 shadow-[0_5px_18px_rgba(43,58,67,0.04)]">
+            {% csrf_token %}
+            {% if form.errors%}
+            <div class="mb-5 border border-[#f0caca] bg-[#f4dddd] p-3 text-[12px] text-[#a95755]">
+                {{form.errors}}---
+            </div>
+            {% endif %}
+
+            <div class="grid gap-5 md:grid-cols-2">
+                <div>
+                    <label class="mb-2 block text-[12px] font-medium text-[#405a63]">الطلب</label>
+                    {{ form.job_request }}
+                    {% if form.job_request.errors %}
+                    <p class="mt-1 text-[11px] text-[#a95755]">{{ form.job_request.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label class="mb-2 block text-[12px] font-medium text-[#405a63]">المتقدم</label>
+                    {{ form.applicant }}
+                    {% if form.applicant.errors %}
+                    <p class="mt-1 text-[11px] text-[#a95755]">{{ form.applicant.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label class="mb-2 block text-[12px] font-medium text-[#405a63]">الحالة</label>
+                    {{ form.status }}
+                    {% if form.status.errors %}
+                    <p class="mt-1 text-[11px] text-[#a95755]">{{ form.status.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label class="mb-2 block text-[12px] font-medium text-[#405a63]">تاريخ التوظيف</label>
+                    {{ form.employment_date }}
+                    {% if form.employment_date.errors %}
+                    <p class="mt-1 text-[11px] text-[#a95755]">{{ form.employment_date.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label class="mb-2 block text-[12px] font-medium text-[#405a63]">الملاحظات</label>
+                    {{ form.notes }}
+                    {% if form.notes.errors %}
+                    <p class="mt-1 text-[11px] text-[#a95755]">{{ form.notes.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- Actions -->
+            <div class="mt-7 flex gap-3 border-t border-[#ecece7] pt-5">
+                <button
+                type="submit"
+                class="bg-[#2d5664] px-5 py-2.5 text-[12px] font-semibold text-[#fff9f0] shadow-[0_4px_12px_rgba(45,86,100,0.18)] transition hover:bg-[#234854]"
+                >
+                {{ button_text }}
+                </button>
+
+                <a
+                href="{% url 'app:applications' %}"
+                class="border border-[#e1e4df] bg-[#fffdfa] px-5 py-2.5 text-[12px] font-semibold text-[#51666c] transition hover:border-[#c7d3ce]"
+                >
+                رجوع
+                </a>
+            </div>
+         </form>
+    </div>
+</div>
+{% endblock content %}
